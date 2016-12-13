@@ -299,6 +299,34 @@ class DrupalConsoleStack extends CommandStack {
   }
 
   /**
+   * Sets the database type to use for initial install.
+   *
+   * @param string $dbType
+   *   The database type.
+   *
+   * @return $this
+   */
+  public function dbType($dbPrefix) {
+    $this->argForNextCommand('--db-type=' . $dbPrefix);
+
+    return $this;
+  }
+
+  /**
+   * Sets the database file to use for initial install.
+   *
+   * @param string $dbFile
+   *   The database file.
+   *
+   * @return $this
+   */
+  public function dbFile($dbFile) {
+    $this->argForNextCommand('--db-file=' . $dbFile);
+
+    return $this;
+  }
+
+  /**
    * Returns the Drupal console version.
    *
    * @return string
