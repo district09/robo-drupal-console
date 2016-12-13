@@ -74,7 +74,7 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
       ->printed(false)
       ->siteStatus()
       ->run();
-    $this->assertTrue($result->wasSuccessful(), 'Exit code was: ' . $result->getExitCode());
+    $this->assertFalse($result->wasSuccessful(), 'Exit code was: ' . $result->getExitCode());
   }
 
 }
