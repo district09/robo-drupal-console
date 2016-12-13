@@ -17,7 +17,7 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
     $container = Robo::createDefaultContainer(null, new NullOutput());
     $this->setContainer($container);
   }
-  
+
   // Scaffold the collection builder
   public function collectionBuilder() {
     $emptyRobofile = new \Robo\Tasks;
@@ -72,7 +72,7 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
   public function testDrupalConsoleStatus() {
     $result = $this->taskDrupalConsoleStack(__DIR__ . '/../vendor/bin/drupal')
       ->printed(false)
-      ->status()
+      ->siteStatus()
       ->run();
     $this->assertTrue($result->wasSuccessful(), 'Exit code was: ' . $result->getExitCode());
   }
