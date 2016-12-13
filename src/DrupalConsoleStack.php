@@ -179,7 +179,7 @@ class DrupalConsoleStack extends CommandStack {
    *
    * @return $this
    */
-  public function verbose($level = static::VERBOSITY_LEVEL_NORMAL) {
+  public function verbose($level = self::VERBOSITY_LEVEL_NORMAL) {
     $this->option('--verbose', $level);
 
     return $this;
