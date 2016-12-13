@@ -41,8 +41,8 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
   public function testOptionsArePrependedBeforeEachCommand() {
     $command = $this->taskDrupalConsoleStack()
       ->drupalRootDirectory('/var/www/html/app')
-      ->exec('command-1')
-      ->exec('command-2')
+      ->drupal('command-1')
+      ->drupal('command-2')
       ->getCommand();
     $this->assertEquals(2, preg_match_all('#-r /var/www/html/app#', $command));
   }
