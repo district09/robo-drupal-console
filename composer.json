@@ -11,6 +11,11 @@
         "phpunit/phpunit": "~4.4"
     },
     "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "DigipolisGent\\Robo\\Task\\DrupalConsole\\": "src"
+        }
+    },
     "scripts": {
         "test": "robo --ansi test"
     },
