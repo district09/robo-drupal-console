@@ -58,7 +58,6 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
       ->dbPrefix('drupal_')
       ->dbType('sqlite')
       ->dbFile('sites/default/.ht.sqlite')
-      ->disableUpdateStatusModule()
       ->siteInstall('minimal')
       ->getCommand();
     $expected = 'drupal site:install minimal --yes --site-name=' . escapeshellarg('Site Name')
