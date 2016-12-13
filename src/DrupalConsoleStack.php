@@ -231,13 +231,13 @@ class DrupalConsoleStack extends CommandStack {
   /**
    * Sets the default site language.
    *
-   * @param string $locale
+   * @param string $langcode
    *   The language code.
    *
    * @return $this
    */
-  public function locale($locale) {
-    $this->argForNextCommand('--locale=' . $locale);
+  public function langcode($langcode) {
+    $this->argForNextCommand('--langcode=' . $langcode);
 
     return $this;
   }
@@ -321,7 +321,7 @@ class DrupalConsoleStack extends CommandStack {
    * @return $this
    */
   public function dbFile($dbFile) {
-    $this->argForNextCommand('--db-file=' . $dbFile);
+    $this->argForNextCommand('--db-file=' . escapeshellarg($dbFile));
 
     return $this;
   }

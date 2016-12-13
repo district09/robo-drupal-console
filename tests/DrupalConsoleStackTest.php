@@ -51,7 +51,7 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
     $command = $this->taskDrupalConsoleStack()
       ->siteName('Site Name')
       ->siteMail('site-mail@example.com')
-      ->locale('de')
+      ->langcode('de')
       ->accountMail('mail@example.com')
       ->accountName('admin')
       ->accountPass('pw')
@@ -64,7 +64,7 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
       . ' --site-mail=site-mail@example.com'
       . ' --langcode=de --account-mail=mail@example.com --account-name=' . escapeshellarg('admin')
       . ' --account-pass=pw'
-      . ' --db-prefix=drupal_ --db-type=mysql --db-type=mysql' . escapeshellarg('sites/default/.ht.sqlite');
+      . ' --db-prefix=drupal_ --db-type=sqlite --db-file=' . escapeshellarg("sites/default/.ht.sqlite");
     $this->assertEquals($expected, $command);
   }
 
