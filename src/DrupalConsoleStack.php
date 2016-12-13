@@ -38,21 +38,61 @@ use Robo\Task\CommandStack;
  *   ->run();
  * ```
  */
-class DrupalConsoleStack extends CommandStack
-{
+class DrupalConsoleStack extends CommandStack {
+
   use CommandArguments;
 
-  protected $argumentsForNextCommand;
+  /**
+   * Verbosity levels:
+   * 1 for normal output, 2 for more verbose output, and 3 for debug.
+   */
+  const VERBOSITY_LEVEL_NORMAL = 1;
+  const VERBOSITY_LEVEL_VERBOSE = 2;
+  const VERBOSITY_LEVEL_DEBUG = 3;
 
   /**
-   * Pass argument to executable; applies to the
-   * next command only.
+   * Pass arguments to the executable; applies to the next command only.
    *
-   * @param $arg
+   * @var string
+   */
+  protected $argumentsForNextCommand;
+
+
+  /**
+   * The Drupal console version.
+   *
+   * @var string
+   */
+  protected $drupalConsoleVersion;
+
+
+  /**
+   * Drush site alias. We need to save this, since it needs to be the first
+   * argument.
+   *
+   * @var string
+   */
+  protected $siteAlias;
+
+  /**
+   * Creates a DrupalConsoleStack object.
+   *
+   * @param string $pathToDrupalConsole
+   *   The path to the Drupal Console executable.
+   */
+  public function __construct($pathToDrupalConsole = 'drupal') {
+    $this->executable = $pathToDrupalConsole;
+  }
+
+  /**
+   * Pass argument to executable; applies to the next command only.
+   *
+   * @param string $arg
+   *   The argument to pass.
+   *
    * @return $this
    */
-  protected function argForNextCommand($arg)
-  {
+  protected function argForNextCommand($arg) {
     return $this->argsForNextCommand($arg);
   }
 
@@ -60,137 +100,211 @@ class DrupalConsoleStack extends CommandStack
    * Pass methods parameters as arguments to executable;
    * applies to the next command only.
    *
-   * @param $args
+   * @param mixed $args,...
+   *   If it's an array, each element is an argument, if not, each parameter to
+   *   this method is an argument.
+   *
    * @return $this
    */
-  protected function argsForNextCommand($args)
-  {
+  protected function argsForNextCommand($args) {
     if (!is_array($args)) {
       $args = func_get_args();
     }
-    $this->argumentsForNextCommand .= " ".implode(' ', $args);
+    $this->argumentsForNextCommand .= " " . implode(' ', $args);
     return $this;
   }
 
   /**
-   * Drush site alias.
-   * We need to save this, since it needs to be the first argument.
+   * Sets the Drupal root directory option.
    *
-   * @var string
+   * @param string $drupalRootDirectory
+   *   The path to the Drupal root directory.
+   *
+   * @return $this
    */
-  protected $siteAlias;
-
-  /**
-   * @var string
-   */
-  protected $drupalConsoleVersion;
-
-  public function __construct($pathToDrupalConsole = 'drupal')
-  {
-    $this->executable = $pathToDrupalConsole;
-  }
-
-  public function drupalRootDirectory($drupalRootDirectory)
-  {
+  public function drupalRootDirectory($drupalRootDirectory) {
     $this->printTaskInfo('Drupal root: <info>' . $drupalRootDirectory . '</info>');
     $this->option('--root', $drupalRootDirectory);
 
     return $this;
   }
 
-  public function uri($uri)
-  {
+  /**
+   * Sets the URI of the Drupal site.
+   *
+   * @param string $uri
+   *   URI of the Drupal site to use (for multi-site environments or when
+   *   running on an alternate port).
+   *
+   * @return $this
+   */
+  public function uri($uri) {
     $this->printTaskInfo('URI: <info>' . $uri . '</info>');
     $this->option('--uri', $uri);
 
     return $this;
   }
 
-  public function environment($environment = 'prod')
-  {
+  /**
+   * Sets the environment name.
+   *
+   * @param string $environment
+   *   The environment name.
+   *
+   * @return $this
+   */
+  public function environment($environment = 'prod') {
     $this->printTaskInfo('Environment: <info>' . $environment . '</info>');
     $this->option('--env ', $environment);
 
     return $this;
   }
 
-  public function noDebug()
-  {
+  /**
+   * Switches off debug mode.
+   *
+   * @return $this
+   */
+  public function noDebug() {
     $this->option('--no-debug');
 
     return $this;
   }
 
-  public function verbose()
-  {
-    $this->option('--verbose');
+  /**
+   * Sets the verbosity level.
+   *
+   * @param int $level
+   *   One of the DrupalConsoleStack::VERBOSITY_LEVEL_* constants.
+   *
+   * @return $this
+   */
+  public function verbose($level = static::VERBOSITY_LEVEL_NORMAL) {
+    $this->option('--verbose', $level);
 
     return $this;
   }
 
-  public function siteName($siteName)
-  {
+  /**
+   * Sets the site name.
+   *
+   * @param string $siteName
+   *   The site name.
+   *
+   * @return $this
+   */
+  public function siteName($siteName) {
     $this->argForNextCommand('--site-name=' . escapeshellarg($siteName));
 
     return $this;
   }
 
-  public function siteMail($siteMail)
-  {
+  /**
+   * Sets the site mail.
+   *
+   * @param string $siteMail
+   *   The site mail.
+   *
+   * @return $this
+   */
+  public function siteMail($siteMail) {
     $this->argForNextCommand('--site-mail=' . $siteMail);
 
     return $this;
   }
 
-  public function sitesSubdir($sitesSubdir)
-  {
+  /**
+   * Sets the name of directory under 'sites' which should be created. Only
+   * needed when the subdirectory does not already exist. Defaults to 'default'.
+   *
+   * @param string $sitesSubdir
+   *   The name of the subdirectory.
+   *
+   * @return $this
+   */
+  public function sitesSubdir($sitesSubdir) {
     $this->argForNextCommand('--sites-subdir=' . $sitesSubdir);
 
     return $this;
   }
 
-  public function locale($locale)
-  {
+  /**
+   * Sets the default site language.
+   *
+   * @param string $locale
+   *   The language code.
+   *
+   * @return $this
+   */
+  public function locale($locale) {
     $this->argForNextCommand('--locale=' . $locale);
 
     return $this;
   }
 
-  public function accountMail($accountMail)
-  {
+  /**
+   * Sets the e-mail address for the account with uid 1.
+   *
+   * @param string $accountMail
+   *   The e-mail address for the account with uid 1.
+   *
+   * @return $this
+   */
+  public function accountMail($accountMail) {
     $this->argForNextCommand('--account-mail=' . $accountMail);
 
     return $this;
   }
 
-  public function accountName($accountName)
-  {
+  /**
+   * Sets the username for the account with uid 1.
+   *
+   * @param string $accountName
+   *   The username.
+   *
+   * @return $this
+   */
+  public function accountName($accountName) {
     $this->argForNextCommand('--account-name=' . escapeshellarg($accountName));
 
     return $this;
   }
 
-  public function accountPass($accountPass)
-  {
+  /**
+   * Sets the password for the account with uid 1.
+   *
+   * @param string $accountPass
+   *   The password.
+   *
+   * @return $this
+   */
+  public function accountPass($accountPass) {
     $this->argForNextCommand('--account-pass=' . $accountPass);
 
     return $this;
   }
 
-  public function dbPrefix($dbPrefix)
-  {
+  /**
+   * Sets the table prefix to use for initial install.
+   *
+   * @param string $dbPrefix
+   *   The table prefix.
+   *
+   * @return $this
+   */
+  public function dbPrefix($dbPrefix) {
     $this->argForNextCommand('--db-prefix=' . $dbPrefix);
 
     return $this;
   }
 
   /**
-   * Returns the drupal console version.
+   * Returns the Drupal console version.
    *
    * @return string
+   *   The Drupal console version.
    */
-  public function getVersion()
-  {
+  public function getVersion() {
     if (empty($this->drupalConsoleVersion)) {
       $isPrinted = $this->isPrinted;
       $this->isPrinted = false;
@@ -211,33 +325,35 @@ class DrupalConsoleStack extends CommandStack
    *
    * @return $this
    */
-  public function siteStatus()
-  {
+  public function siteStatus() {
     return $this->drupal('site:status');
   }
 
   /**
    * Clears the given cache.
    *
-   * @param string $name cache name
+   * @param string $cacheName
+   *   The cache name.
+   *
    * @return $this
    */
-  public function cacheRebuild($cacheName = 'all')
-  {
+  public function cacheRebuild($cacheName = 'all') {
     $this->printTaskInfo('Cache rebuild');
 
     return $this->drupal("cache:rebuild $cacheName");
   }
 
   /**
-   * Runs pending database updates.
+   * Execute a specific Update N function in a module, or execute all.
    *
    * @param string $module
+   *   The module name.
    * @param string $updateN
+   *   Specific update N function to be executed.
+   *
    * @return $this
    */
-  public function updateDb($module = 'all', $updateN)
-  {
+  public function updateDb($module = 'all', $updateN = '') {
     $this->printTaskInfo('Perform database updates');
     $this->drupal("update:execute $module $updateN");
 
@@ -247,10 +363,12 @@ class DrupalConsoleStack extends CommandStack
   /**
    * Sets the maintenance mode.
    *
+   * @param bool $mode
+   *   Whether or not the maintenance mode should be on or off.
+   *
    * @return $this
    */
-  public function maintenance($mode = TRUE)
-  {
+  public function maintenance($mode = TRUE) {
     $maintenanceMode = $mode ? 'on' : 'off';
     $this->printTaskInfo("Set maintenance mode $maintenanceMode");
 
@@ -258,23 +376,28 @@ class DrupalConsoleStack extends CommandStack
   }
 
   /**
+   * Executes `drupal site:install`.
+   *
    * @param string $installationProfile
+   *   The installation profile to use during install.
+   *
    * @return $this
    */
-  public function siteInstall($installationProfile)
-  {
+  public function siteInstall($installationProfile = '') {
     return $this->drupal('site:install ' . $installationProfile);
   }
 
   /**
-   * Runs the given drupal console command.
+   * Runs the given Drupal console command.
    *
    * @param string $command
+   *   The Drupal console command to execute.
    * @param bool $assumeYes
+   *   Whether or not to assume yes on all prompts.
+   *
    * @return $this
    */
-  public function drupal($command, $assumeYes = true)
-  {
+  public function drupal($command, $assumeYes = true) {
     return $this->exec($this->injectArguments($command, $assumeYes));
   }
 
@@ -282,14 +405,18 @@ class DrupalConsoleStack extends CommandStack
    * Appends arguments to the command.
    *
    * @param string $command
+   *   The command to append the arguments to.
    * @param bool $assumeYes
-   * @return string the modified command string
+   *   Whether or not to assume yes on all prompts.
+   *
+   * @return string
+   *   The modified command string.
    */
-  protected function injectArguments($command, $assumeYes)
-  {
+  protected function injectArguments($command, $assumeYes) {
     $cmd = $command . ($assumeYes ? ' --yes' : '') . $this->arguments . $this->argumentsForNextCommand;
     $this->argumentsForNextCommand = '';
 
     return $cmd;
   }
+
 }
