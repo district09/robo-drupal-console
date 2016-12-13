@@ -1,10 +1,10 @@
 <?php
-class RoboFile extends \Robo\Tasks
-{
+
+class RoboFile extends \Robo\Tasks {
+
   use DigipolisGent\Robo\Task\DrupalConsole\loadTasks;
 
-  public function test()
-  {
+  public function test() {
     $this->stopOnFail(true);
     $this->taskPHPUnit()
       ->option('disallow-test-output')
@@ -15,4 +15,5 @@ class RoboFile extends \Robo\Tasks
       ->arg('tests')
       ->run();
   }
+
 }

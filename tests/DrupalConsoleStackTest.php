@@ -1,27 +1,24 @@
 <?php
 
-class DrushStackTest extends \PHPUnit_Framework_TestCase
-{
+class DrushStackTest extends \PHPUnit_Framework_TestCase {
+
   use DigipolisGent\Robo\Task\Drush\loadTasks;
 
-  public function testYesIsAssumed()
-  {
+  public function testYesIsAssumed() {
     $command = $this->taskDrupalConsoleStack()
       ->exec('command')
       ->getCommand();
     $this->assertEquals('drupal command --yes', $command);
   }
 
-  public function testAbsenceofYes()
-  {
+  public function testAbsenceofYes() {
     $command = $this->taskDrupalConsoleStack()
       ->exec('command', false)
       ->getCommand();
     $this->assertEquals('drupal command', $command);
   }
 
-  public function testOptionsArePrependedBeforeEachCommand()
-  {
+  public function testOptionsArePrependedBeforeEachCommand() {
     $command = $this->taskDrupalConsoleStack()
       ->drupalRootDirectory('/var/www/html/app')
       ->exec('command-1')
@@ -30,8 +27,7 @@ class DrushStackTest extends \PHPUnit_Framework_TestCase
     $this->assertEquals(2, preg_match_all('#-r /var/www/html/app#', $command));
   }
 
-  public function testSiteInstallCommand()
-  {
+  public function testSiteInstallCommand() {
     $command = $this->taskDrupalConsoleStack()
       ->siteName('Site Name')
       ->siteMail('site-mail@example.com')
@@ -53,8 +49,7 @@ class DrushStackTest extends \PHPUnit_Framework_TestCase
     $this->assertEquals($expected, $command);
   }
 
-  public function testDrupalConsoleStatus()
-  {
+  public function testDrupalConsoleStatus() {
     $result = $this->taskDrupalConsoleStack(__DIR__ . '/../vendor/bin/drupal')
       ->printed(false)
       ->status()
