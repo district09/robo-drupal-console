@@ -17,6 +17,7 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
     $container = Robo::createDefaultContainer(null, new NullOutput());
     $this->setContainer($container);
   }
+  
   // Scaffold the collection builder
   public function collectionBuilder() {
     $emptyRobofile = new \Robo\Tasks;
