@@ -26,14 +26,14 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
 
   public function testYesIsAssumed() {
     $command = $this->taskDrupalConsoleStack()
-      ->exec('command')
+      ->drupal('command')
       ->getCommand();
     $this->assertEquals('drupal command --yes', $command);
   }
 
   public function testAbsenceofYes() {
     $command = $this->taskDrupalConsoleStack()
-      ->exec('command', false)
+      ->drupal('command', false)
       ->getCommand();
     $this->assertEquals('drupal command', $command);
   }
