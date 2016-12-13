@@ -1,8 +1,8 @@
 <?php
 
-class DrushStackTest extends \PHPUnit_Framework_TestCase {
+class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase {
 
-  use DigipolisGent\Robo\Task\Drush\loadTasks;
+  use DigipolisGent\Robo\Task\DrupalConsole\loadTasks;
 
   public function testYesIsAssumed() {
     $command = $this->taskDrupalConsoleStack()
