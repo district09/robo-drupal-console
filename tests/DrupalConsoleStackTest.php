@@ -44,7 +44,7 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
       ->drupal('command-1')
       ->drupal('command-2')
       ->getCommand();
-    $this->assertEquals(2, preg_match_all('#-r /var/www/html/app#', $command));
+    $this->assertEquals(2, preg_match_all('#--root /var/www/html/app#', $command));
   }
 
   public function testSiteInstallCommand() {
