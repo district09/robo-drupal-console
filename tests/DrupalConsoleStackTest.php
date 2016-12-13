@@ -69,10 +69,10 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
     $this->assertEquals($expected, $command);
   }
 
-  public function testDrupalConsoleStatus() {
+  public function testDrupalConsoleList() {
     $result = $this->taskDrupalConsoleStack(__DIR__ . '/../vendor/bin/drupal')
       ->printed(false)
-      ->siteStatus()
+      ->listCommands()
       ->run();
     $this->assertFalse($result->wasSuccessful(), 'Exit code was: ' . $result->getExitCode());
   }

@@ -321,6 +321,15 @@ class DrupalConsoleStack extends CommandStack {
   }
 
   /**
+   * Executes `drupal list`
+   *
+   * @return $this
+   */
+  public function listCommands() {
+    return $this->drupal('list');
+  }
+
+  /**
    * Executes `drupal site:status`
    *
    * @return $this
