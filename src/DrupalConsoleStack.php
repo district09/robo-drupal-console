@@ -228,6 +228,31 @@ class DrupalConsoleStack extends CommandStack {
   }
 
   /**
+   * Sets the directory to use e.g. for config import/export.
+   *
+   * @param string $directory
+   *   The directory to use.
+   *
+   * @return $this
+   */
+  public function directory($directory) {
+    $this->argForNextCommand('--directory=' . escapeshellarg($directory));
+
+    return $this;
+  }
+
+  /**
+   * Set the tar option e.g. for config:export.
+   *
+   * @return $this
+   */
+  public function tar() {
+    $this->argForNextCommand('--tar');
+
+    return $this;
+  }
+
+  /**
    * Sets the default site language.
    *
    * @param string $langcode
@@ -488,6 +513,30 @@ class DrupalConsoleStack extends CommandStack {
    */
   public function siteInstall($installationProfile = '') {
     return $this->drupal('site:install ' . $installationProfile);
+  }
+
+  /**
+   * Export configuration
+   *
+   * @return $this
+   */
+  public function configExport() {
+    $this->printTaskInfo('Export configuration');
+    $this->drupal('config:export');
+
+    return $this;
+  }
+
+  /**
+   * Import configuration
+   *
+   * @return $this
+   */
+  public function configImport() {
+    $this->printTaskInfo('Import configuration');
+    $this->drupal('config:import');
+
+    return $this;
   }
 
   /**
