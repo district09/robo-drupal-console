@@ -47,7 +47,7 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
     $this->assertEquals(2, preg_match_all('#--root /var/www/html/app#', $command));
   }
 
-  public function testSiteInstallCommand() {
+  public function testSiteInstallSqliteCommand() {
     $command = $this->taskDrupalConsoleStack()
       ->siteName('Site Name')
       ->siteMail('site-mail@example.com')
@@ -65,6 +65,31 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
       . ' --langcode=de --account-mail=mail@example.com --account-name=' . escapeshellarg('admin')
       . ' --account-pass=pw'
       . ' --db-prefix=drupal_ --db-type=sqlite --db-file=' . escapeshellarg("sites/default/.ht.sqlite");
+    $this->assertEquals($expected, $command);
+  }
+
+  public function testSiteInstallMysqlCommand() {
+    $command = $this->taskDrupalConsoleStack()
+      ->siteName('Site Name Mysql')
+      ->siteMail('site-mail2@example.com')
+      ->langcode('fr')
+      ->accountMail('mail2@example.com')
+      ->accountName('admin-user')
+      ->accountPass('passw')
+      ->dbPrefix('drupal_')
+      ->dbType('mysql')
+      ->dbHost('localhost')
+      ->dbName('testdb')
+      ->dbUser('dbuser')
+      ->dbPass('testdbpw')
+      ->siteInstall('standard')
+      ->getCommand();
+    $expected = 'drupal site:install standard --yes --site-name=' .escapeshellarg('Site Name Mysql')
+      . ' --site-mail=site-mail2@example.com --langcode=fr'
+      . ' --account-mail=mail2@example.com --account-name=' .escapeshellarg('admin-user')
+      . ' --account-pass=passw --db-prefix=drupal_ --db-type=mysql'
+      . ' --db-host=' . escapeshellarg('localhost') . ' --db-name=' . escapeshellarg('testdb')
+      . ' --db-user=' . escapeshellarg('dbuser') . ' --db-pass=' . escapeshellarg('testdbpw');
     $this->assertEquals($expected, $command);
   }
 
