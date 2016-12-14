@@ -689,7 +689,7 @@ class DrupalConsoleStack extends CommandStack
     {
         $optionsForNextCommand = '';
         foreach ($this->optionsForNextCommand as $option => $value) {
-            $optionsForNextCommand .= '--' . $option . (is_null($value) ? '' : '=' . static::escape($value));
+            $optionsForNextCommand .= ' --' . $option . (is_null($value) ? '' : '=' . static::escape($value));
         }
         $cmd = $command . ($assumeYes ? ' --yes' : '') . $this->arguments . $optionsForNextCommand;
         $this->optionsForNextCommand = [];
