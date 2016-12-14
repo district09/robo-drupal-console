@@ -274,8 +274,8 @@ class DrupalConsoleStack extends CommandStack {
    *
    * @return $this
    */
-  public function dbType($dbPrefix) {
-    $this->argForNextCommand('--db-type=' . $dbPrefix);
+  public function dbType($dbType) {
+    $this->argForNextCommand('--db-type=' . $dbType);
 
     return $this;
   }
