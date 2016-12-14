@@ -465,6 +465,21 @@ class DrupalConsoleStack extends CommandStack {
   }
 
   /**
+   * Execute a cron implementation.
+   *
+   * @param string $module
+   *   The module name.
+   *
+   * @return $this
+   */
+  public function executeCron($module) {
+    $this->printTaskInfo('Execute cron');
+    $this->drupal("cron:execute $module");
+
+    return $this;
+  }
+
+  /**
    * Executes `drupal site:install`.
    *
    * @param string $installationProfile
