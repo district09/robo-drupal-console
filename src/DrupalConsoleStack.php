@@ -243,6 +243,118 @@ class DrupalConsoleStack extends CommandStack {
   }
 
   /**
+   * Sets the database type to use for initial install.
+   *
+   * @param string $dbType
+   *   The database type.
+   *
+   * @return $this
+   */
+  public function dbType($dbPrefix) {
+    $this->argForNextCommand('--db-type=' . $dbPrefix);
+
+    return $this;
+  }
+
+  /**
+   * Sets the database file to use for initial install.
+   *
+   * @param string $dbFile
+   *   The database file.
+   *
+   * @return $this
+   */
+  public function dbFile($dbFile) {
+    $this->argForNextCommand('--db-file=' . escapeshellarg($dbFile));
+
+    return $this;
+  }
+
+  /**
+   * Sets the database host to use for initial install.
+   *
+   * @param string $dbHost
+   *   The database host.
+   *
+   * @return $this
+   */
+  public function dbHost($dbHost) {
+    $this->argForNextCommand('--db-host=' . escapeshellarg($dbHost));
+
+    return $this;
+  }
+
+  /**
+   * Sets the database name to use for initial install.
+   *
+   * @param string $dbName
+   *   The database name.
+   *
+   * @return $this
+   */
+  public function dbName($dbName) {
+    $this->argForNextCommand('--db-name=' . escapeshellarg($dbName));
+
+    return $this;
+  }
+
+  /**
+   * Sets the database user to use for initial install.
+   *
+   * @param string $dbUser
+   *   The database user.
+   *
+   * @return $this
+   */
+  public function dbUser($dbUser) {
+    $this->argForNextCommand('--db-user=' . escapeshellarg($dbUser));
+
+    return $this;
+  }
+
+  /**
+   * Sets the database password to use for initial install.
+   *
+   * @param string $dbPass
+   *   The database password.
+   *
+   * @return $this
+   */
+  public function dbPass($dbPass) {
+    $this->argForNextCommand('--db-pass=' . escapeshellarg($dbPass));
+
+    return $this;
+  }
+
+  /**
+   * Sets the table prefix to use for initial install.
+   *
+   * @param string $dbPrefix
+   *   The table prefix.
+   *
+   * @return $this
+   */
+  public function dbPrefix($dbPrefix) {
+    $this->argForNextCommand('--db-prefix=' . $dbPrefix);
+
+    return $this;
+  }
+
+  /**
+   * Sets the database port to use for initial install.
+   *
+   * @param string $dbPort
+   *   The database port.
+   *
+   * @return $this
+   */
+  public function dbPort($dbPort) {
+    $this->argForNextCommand('--db-port=' . escapeshellarg($dbPort));
+
+    return $this;
+  }
+
+  /**
    * Sets the e-mail address for the account with uid 1.
    *
    * @param string $accountMail
@@ -285,48 +397,6 @@ class DrupalConsoleStack extends CommandStack {
   }
 
   /**
-   * Sets the table prefix to use for initial install.
-   *
-   * @param string $dbPrefix
-   *   The table prefix.
-   *
-   * @return $this
-   */
-  public function dbPrefix($dbPrefix) {
-    $this->argForNextCommand('--db-prefix=' . $dbPrefix);
-
-    return $this;
-  }
-
-  /**
-   * Sets the database type to use for initial install.
-   *
-   * @param string $dbType
-   *   The database type.
-   *
-   * @return $this
-   */
-  public function dbType($dbPrefix) {
-    $this->argForNextCommand('--db-type=' . $dbPrefix);
-
-    return $this;
-  }
-
-  /**
-   * Sets the database file to use for initial install.
-   *
-   * @param string $dbFile
-   *   The database file.
-   *
-   * @return $this
-   */
-  public function dbFile($dbFile) {
-    $this->argForNextCommand('--db-file=' . escapeshellarg($dbFile));
-
-    return $this;
-  }
-
-  /**
    * Returns the Drupal console version.
    *
    * @return string
@@ -349,25 +419,7 @@ class DrupalConsoleStack extends CommandStack {
   }
 
   /**
-   * Executes `drupal list`
-   *
-   * @return $this
-   */
-  public function listCommands() {
-    return $this->drupal('list');
-  }
-
-  /**
-   * Executes `drupal site:status`
-   *
-   * @return $this
-   */
-  public function siteStatus() {
-    return $this->drupal('site:status');
-  }
-
-  /**
-   * Clears the given cache.
+   * Rebuilds the given cache.
    *
    * @param string $cacheName
    *   The cache name.
@@ -422,6 +474,24 @@ class DrupalConsoleStack extends CommandStack {
    */
   public function siteInstall($installationProfile = '') {
     return $this->drupal('site:install ' . $installationProfile);
+  }
+
+  /**
+   * Executes `drupal list`
+   *
+   * @return $this
+   */
+  public function listCommands() {
+    return $this->drupal('list');
+  }
+
+  /**
+   * Executes `drupal site:status`
+   *
+   * @return $this
+   */
+  public function siteStatus() {
+    return $this->drupal('site:status');
   }
 
   /**
