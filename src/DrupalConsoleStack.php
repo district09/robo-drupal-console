@@ -100,7 +100,7 @@ class DrupalConsoleStack extends CommandStack
      */
     protected function optionForNextCommand($name, $value = NULL)
     {
-        return $this->optionsForNextCommand([[$name => $value]]);
+        return $this->optionsForNextCommand([$name => $value]);
     }
 
     /**
