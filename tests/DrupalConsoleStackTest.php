@@ -47,6 +47,27 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
     $this->assertEquals(2, preg_match_all('#--root /var/www/html/app#', $command));
   }
 
+  public function testConfigExportCommand() {
+    $command = $this->taskDrupalConsoleStack()
+      ->directory('sites/default/config')
+      ->tar()
+      ->configExport()
+      ->getCommand();
+    $expected = 'drupal config:export --yes'
+      . ' --directory=' . escapeshellarg('sites/default/config') . ' --tar';
+    $this->assertEquals($expected, $command);
+  }
+
+  public function testConfigImportCommand() {
+    $command = $this->taskDrupalConsoleStack()
+      ->directory('sites/default/config')
+      ->configImport()
+      ->getCommand();
+    $expected = 'drupal config:import --yes'
+      . ' --directory=' . escapeshellarg('sites/default/config');
+    $this->assertEquals($expected, $command);
+  }
+
   public function testSiteInstallSqliteCommand() {
     $command = $this->taskDrupalConsoleStack()
       ->siteName('Site Name')
