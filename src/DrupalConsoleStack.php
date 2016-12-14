@@ -492,6 +492,51 @@ class DrupalConsoleStack extends CommandStack {
   }
 
   /**
+   * Dumps the database.
+   *
+   * @param string $database
+   *   The database name.
+   *
+   * @return $this
+   */
+  public function dbDump($database) {
+    $this->printTaskInfo("Dump database $database");
+    $this->drupal("database:dump $database");
+
+    return $this;
+  }
+
+  /**
+   * Restores the database.
+   *
+   * @param string $database
+   *   The database name.
+   *
+   * @return $this
+   */
+  public function dbRestore($database) {
+    $this->printTaskInfo("Restore database $database");
+    $this->drupal("database:restore $database");
+
+    return $this;
+  }
+
+  /**
+   * Drops the database.
+   *
+   * @param string $database
+   *   The database name.
+   *
+   * @return $this
+   */
+  public function dbDrop($database) {
+    $this->printTaskInfo("Drops database $database");
+    $this->drupal("database:drop $database");
+
+    return $this;
+  }
+
+  /**
    * Executes `drupal list`
    *
    * @return $this
