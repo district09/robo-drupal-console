@@ -16,7 +16,7 @@ use Robo\Task\CommandStack;
  *     ->uri('sub.example.com')
  *     ->maintenanceOn(true)
  *     ->updateDb()
- *     ->revertAllFeatures()
+ *     ->configImport()
  *     ->maintenanceOff()
  *     ->run();
  * ```
@@ -25,16 +25,19 @@ use Robo\Task\CommandStack;
  *
  * ``` php
  * $this->taskDrushStack()
- *   ->siteName('Site Name')
- *   ->siteMail('site-mail@example.com')
- *   ->locale('de')
- *   ->accountMail('mail@example.com')
- *   ->accountName('admin')
- *   ->accountPass('pw')
+ *   ->siteName('Site Name Mysql')
+ *   ->siteMail('site-mail2@example.com')
+ *   ->langcode('fr')
+ *   ->accountMail('mail2@example.com')
+ *   ->accountName('admin-user')
+ *   ->accountPass('passw')
  *   ->dbPrefix('drupal_')
- *   ->sqliteDbUrl('sites/default/.ht.sqlite')
- *   ->disableUpdateStatusModule()
- *   ->siteInstall('minimal')
+ *   ->dbType('mysql')
+ *   ->dbHost('localhost')
+ *   ->dbName('testdb')
+ *   ->dbUser('dbuser')
+ *   ->dbPass('testdbpw')
+ *   ->siteInstall('standard')
  *   ->run();
  * ```
  */
