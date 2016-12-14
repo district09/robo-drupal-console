@@ -1,10 +1,12 @@
 <?php
-
 class RoboFile extends \Robo\Tasks
 {
 
     use DigipolisGent\Robo\Task\DrupalConsole\loadTasks;
 
+    /**
+     * Runs the unit tests.
+     */
     public function test()
     {
         $this->stopOnFail(true);

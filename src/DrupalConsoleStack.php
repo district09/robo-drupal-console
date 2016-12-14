@@ -1,5 +1,4 @@
 <?php
-
 namespace DigipolisGent\Robo\Task\DrupalConsole;
 
 use Robo\Common\CommandArguments;
@@ -55,11 +54,11 @@ class DrupalConsoleStack extends CommandStack
     const VERBOSITY_LEVEL_DEBUG = 3;
 
     /**
-     * Pass arguments to the executable; applies to the next command only.
+     * Options to pass to the executable.
      *
-     * @var string
+     * @var array
      */
-    protected $argumentsForNextCommand;
+    protected $optionsForNextCommand = [];
 
 
     /**
@@ -90,34 +89,33 @@ class DrupalConsoleStack extends CommandStack
     }
 
     /**
-     * Pass argument to executable; applies to the next command only.
+     * Pass an option to the executable; applies to the next command only.
      *
-     * @param string $arg
-     *   The argument to pass.
+     * @param string $name
+     *   The name of the option to pass.
+     * @param string $value
+     *   The value for this option to pass (optional).
      *
      * @return $this
      */
-    protected function argForNextCommand($arg)
+    protected function optionForNextCommand($name, $value = NULL)
     {
-        return $this->argsForNextCommand($arg);
+        return $this->optionsForNextCommand([[$name => $value]]);
     }
 
     /**
-     * Pass methods parameters as arguments to executable;
+     * Pass this method's parameters as options to the executable;
      * applies to the next command only.
      *
-     * @param mixed $args,...
-     *   If it's an array, each element is an argument, if not, each parameter to
-     *   this method is an argument.
+     * @param array $options
+     *   An array of associative arrays where the array key is the option name
+     *   and the value is the (unescaped) option value.
      *
      * @return $this
      */
-    protected function argsForNextCommand($args)
+    protected function optionsForNextCommand($options)
     {
-        if (!is_array($args)) {
-            $args = func_get_args();
-        }
-        $this->argumentsForNextCommand .= " " . implode(' ', $args);
+        $this->optionsForNextCommand = $options + $this->optionsForNextCommand;
         return $this;
     }
 
@@ -132,7 +130,7 @@ class DrupalConsoleStack extends CommandStack
     public function drupalRootDirectory($drupalRootDirectory)
     {
         $this->printTaskInfo('Drupal root: <info>' . $drupalRootDirectory . '</info>');
-        $this->option('--root', $drupalRootDirectory);
+        $this->option('root', $drupalRootDirectory);
 
         return $this;
     }
@@ -149,7 +147,7 @@ class DrupalConsoleStack extends CommandStack
     public function uri($uri)
     {
         $this->printTaskInfo('URI: <info>' . $uri . '</info>');
-        $this->option('--uri', $uri);
+        $this->option('uri', $uri);
 
         return $this;
     }
@@ -165,7 +163,7 @@ class DrupalConsoleStack extends CommandStack
     public function environment($environment = 'prod')
     {
         $this->printTaskInfo('Environment: <info>' . $environment . '</info>');
-        $this->option('--env ', $environment);
+        $this->option('env ', $environment);
 
         return $this;
     }
@@ -177,7 +175,7 @@ class DrupalConsoleStack extends CommandStack
      */
     public function noDebug()
     {
-        $this->option('--no-debug');
+        $this->option('no-debug');
 
         return $this;
     }
@@ -192,7 +190,7 @@ class DrupalConsoleStack extends CommandStack
      */
     public function verbose($level = self::VERBOSITY_LEVEL_NORMAL)
     {
-        $this->option('--verbose', $level);
+        $this->option('verbose', $level);
 
         return $this;
     }
@@ -207,7 +205,7 @@ class DrupalConsoleStack extends CommandStack
      */
     public function siteName($siteName)
     {
-        $this->argForNextCommand('--site-name=' . escapeshellarg($siteName));
+        $this->optionForNextCommand('site-name', $siteName);
 
         return $this;
     }
@@ -222,7 +220,7 @@ class DrupalConsoleStack extends CommandStack
      */
     public function siteMail($siteMail)
     {
-        $this->argForNextCommand('--site-mail=' . $siteMail);
+        $this->optionForNextCommand('site-mail', $siteMail);
 
         return $this;
     }
@@ -237,7 +235,7 @@ class DrupalConsoleStack extends CommandStack
      */
     public function file($file)
     {
-        $this->argForNextCommand('--file=' . $file);
+        $this->optionForNextCommand('file', $file);
 
         return $this;
     }
@@ -252,7 +250,7 @@ class DrupalConsoleStack extends CommandStack
      */
     public function directory($directory)
     {
-        $this->argForNextCommand('--directory=' . escapeshellarg($directory));
+        $this->optionForNextCommand('directory', $directory);
 
         return $this;
     }
@@ -264,7 +262,7 @@ class DrupalConsoleStack extends CommandStack
      */
     public function tar()
     {
-        $this->argForNextCommand('--tar');
+        $this->optionForNextCommand('tar');
 
         return $this;
     }
@@ -279,7 +277,7 @@ class DrupalConsoleStack extends CommandStack
      */
     public function langcode($langcode)
     {
-        $this->argForNextCommand('--langcode=' . $langcode);
+        $this->optionForNextCommand('langcode', $langcode);
 
         return $this;
     }
@@ -294,7 +292,7 @@ class DrupalConsoleStack extends CommandStack
      */
     public function dbType($dbType)
     {
-        $this->argForNextCommand('--db-type=' . $dbType);
+        $this->optionForNextCommand('db-type', $dbType);
 
         return $this;
     }
@@ -309,7 +307,7 @@ class DrupalConsoleStack extends CommandStack
      */
     public function dbFile($dbFile)
     {
-        $this->argForNextCommand('--db-file=' . escapeshellarg($dbFile));
+        $this->optionForNextCommand('db-file', $dbFile);
 
         return $this;
     }
@@ -324,7 +322,7 @@ class DrupalConsoleStack extends CommandStack
      */
     public function dbHost($dbHost)
     {
-        $this->argForNextCommand('--db-host=' . escapeshellarg($dbHost));
+        $this->optionForNextCommand('db-host', $dbHost);
 
         return $this;
     }
@@ -339,7 +337,7 @@ class DrupalConsoleStack extends CommandStack
      */
     public function dbName($dbName)
     {
-        $this->argForNextCommand('--db-name=' . escapeshellarg($dbName));
+        $this->optionForNextCommand('db-name', $dbName);
 
         return $this;
     }
@@ -354,7 +352,7 @@ class DrupalConsoleStack extends CommandStack
      */
     public function dbUser($dbUser)
     {
-        $this->argForNextCommand('--db-user=' . escapeshellarg($dbUser));
+        $this->optionForNextCommand('db-user', $dbUser);
 
         return $this;
     }
@@ -369,7 +367,7 @@ class DrupalConsoleStack extends CommandStack
      */
     public function dbPass($dbPass)
     {
-        $this->argForNextCommand('--db-pass=' . escapeshellarg($dbPass));
+        $this->optionForNextCommand('db-pass', $dbPass);
 
         return $this;
     }
@@ -384,7 +382,7 @@ class DrupalConsoleStack extends CommandStack
      */
     public function dbPrefix($dbPrefix)
     {
-        $this->argForNextCommand('--db-prefix=' . $dbPrefix);
+        $this->optionForNextCommand('db-prefix', $dbPrefix);
 
         return $this;
     }
@@ -399,7 +397,7 @@ class DrupalConsoleStack extends CommandStack
      */
     public function dbPort($dbPort)
     {
-        $this->argForNextCommand('--db-port=' . escapeshellarg($dbPort));
+        $this->optionForNextCommand('db-port', $dbPort);
 
         return $this;
     }
@@ -414,7 +412,7 @@ class DrupalConsoleStack extends CommandStack
      */
     public function accountMail($accountMail)
     {
-        $this->argForNextCommand('--account-mail=' . $accountMail);
+        $this->optionForNextCommand('account-mail', $accountMail);
 
         return $this;
     }
@@ -429,7 +427,7 @@ class DrupalConsoleStack extends CommandStack
      */
     public function accountName($accountName)
     {
-        $this->argForNextCommand('--account-name=' . escapeshellarg($accountName));
+        $this->optionForNextCommand('account-name', $accountName);
 
         return $this;
     }
@@ -444,7 +442,7 @@ class DrupalConsoleStack extends CommandStack
      */
     public function accountPass($accountPass)
     {
-        $this->argForNextCommand('--account-pass=' . $accountPass);
+        $this->optionForNextCommand('account-pass', $accountPass);
 
         return $this;
     }
@@ -484,7 +482,7 @@ class DrupalConsoleStack extends CommandStack
     {
         $this->printTaskInfo('Cache rebuild');
 
-        return $this->drupal("cache:rebuild $cacheName");
+        return $this->drupal('cache:rebuild ' . static::escape($cacheName));
     }
 
     /**
@@ -500,7 +498,7 @@ class DrupalConsoleStack extends CommandStack
     public function updateDb($module = 'all', $updateN = '')
     {
         $this->printTaskInfo('Perform database updates');
-        $this->drupal("update:execute $module $updateN");
+        $this->drupal('update:execute ' . static::escape($module) . ' ' . static::escape($updateN));
 
         return $this;
     }
@@ -516,9 +514,9 @@ class DrupalConsoleStack extends CommandStack
     public function maintenance($mode = true)
     {
         $maintenanceMode = $mode ? 'on' : 'off';
-        $this->printTaskInfo("Set maintenance mode $maintenanceMode");
+        $this->printTaskInfo('Set maintenance mode ' . $maintenanceMode);
 
-        return $this->drupal('site:maintenance $maintenanceMode');
+        return $this->drupal('site:maintenance ' . static::escape($maintenanceMode));
     }
 
     /**
@@ -532,7 +530,7 @@ class DrupalConsoleStack extends CommandStack
     public function executeCron($module)
     {
         $this->printTaskInfo('Execute cron');
-        $this->drupal("cron:execute $module");
+        $this->drupal('cron:execute ' . static::escape($module));
 
         return $this;
     }
@@ -547,11 +545,11 @@ class DrupalConsoleStack extends CommandStack
      */
     public function siteInstall($installationProfile = '')
     {
-        return $this->drupal('site:install ' . $installationProfile);
+        return $this->drupal('site:install ' . static::escape($installationProfile));
     }
 
     /**
-     * Export configuration
+     * Export configuration.
      *
      * @return $this
      */
@@ -564,7 +562,7 @@ class DrupalConsoleStack extends CommandStack
     }
 
     /**
-     * Import configuration
+     * Import configuration.
      *
      * @return $this
      */
@@ -587,7 +585,7 @@ class DrupalConsoleStack extends CommandStack
     public function dbDump($database)
     {
         $this->printTaskInfo("Dump database $database");
-        $this->drupal("database:dump $database");
+        $this->drupal('database:dump ' . static::escape($database));
 
         return $this;
     }
@@ -602,8 +600,8 @@ class DrupalConsoleStack extends CommandStack
      */
     public function dbRestore($database)
     {
-        $this->printTaskInfo("Restore database $database");
-        $this->drupal("database:restore $database");
+        $this->printTaskInfo('Restore database ' . $database);
+        $this->drupal('database:restore ' . static::escape($database));
 
         return $this;
     }
@@ -618,14 +616,14 @@ class DrupalConsoleStack extends CommandStack
      */
     public function dbDrop($database)
     {
-        $this->printTaskInfo("Drops database $database");
-        $this->drupal("database:drop $database");
+        $this->printTaskInfo('Drops database ' . $database);
+        $this->drupal('database:drop ' . static::escape($database));
 
         return $this;
     }
 
     /**
-     * Drops the database.
+     * Executes migrations.
      *
      * @param array $migrationIds
      *   The migration ids.
@@ -635,14 +633,14 @@ class DrupalConsoleStack extends CommandStack
     public function executeMigrate($migrationIds)
     {
         $migrationIdsString = implode(',', $migrationIds);
-        $this->printTaskInfo("Execute migrations $migrationIdsString");
-        $this->drupal("migrate:execute $migrationIdsString");
+        $this->printTaskInfo('Execute migrations ' . $migrationIdsString);
+        $this->drupal('migrate:execute ' . static::escape($migrationIdsString));
 
         return $this;
     }
 
     /**
-     * Executes `drupal list`
+     * Executes `drupal list`.
      *
      * @return $this
      */
@@ -652,7 +650,7 @@ class DrupalConsoleStack extends CommandStack
     }
 
     /**
-     * Executes `drupal site:status`
+     * Executes `drupal site:status`.
      *
      * @return $this
      */
@@ -689,8 +687,12 @@ class DrupalConsoleStack extends CommandStack
      */
     protected function injectArguments($command, $assumeYes)
     {
-        $cmd = $command . ($assumeYes ? ' --yes' : '') . $this->arguments . $this->argumentsForNextCommand;
-        $this->argumentsForNextCommand = '';
+        $optionsForNextCommand = '';
+        foreach ($this->optionsForNextCommand as $option => $value) {
+            $optionsForNextCommand .= '--' . $option . (is_null($value) ? '' : '=' . static::escape($value));
+        }
+        $cmd = $command . ($assumeYes ? ' --yes' : '') . $this->arguments . $optionsForNextCommand;
+        $this->optionsForNextCommand = [];
 
         return $cmd;
     }

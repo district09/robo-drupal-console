@@ -1,5 +1,4 @@
 <?php
-
 namespace DigipolisGent\Robo\Task\DrupalConsole;
 
 trait loadTasks
