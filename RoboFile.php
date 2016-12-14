@@ -20,4 +20,20 @@ class RoboFile extends \Robo\Tasks
           ->run();
     }
 
+    /**
+     * Provides test coverage for Scrutinizer
+     */
+    public function testCoverageScrutinize()
+    {
+        $this->stopOnFail(true);
+        $this->taskPHPUnit()
+          ->option('disallow-test-output')
+          ->option('report-useless-tests')
+          ->option('strict-coverage')
+          ->option('-d error_reporting=-1')
+          ->option('--coverage-clover=coverage.clover')
+          ->arg('tests')
+          ->run();
+    }
+
 }

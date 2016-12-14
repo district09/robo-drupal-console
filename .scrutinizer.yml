@@ -42,3 +42,11 @@ tools:
         enabled: true
     php_changetracking:
         enabled: true
+build:
+    tests:
+        override:
+            -
+                command: 'vendor/bin/robo test:coverage-scrutinize'
+                coverage:
+                    file: 'coverage.clover'
+                    format: 'clover'
