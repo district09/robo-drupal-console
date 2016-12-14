@@ -1,8 +1,9 @@
 <?php
 use League\Container\ContainerAwareInterface;
 use League\Container\ContainerAwareTrait;
-use Robo\TaskAccessor;
+use Robo\Common\CommandArguments;
 use Robo\Robo;
+use Robo\TaskAccessor;
 use Symfony\Component\Console\Output\NullOutput;
 
 class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements ContainerAwareInterface
@@ -11,6 +12,7 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
     use DigipolisGent\Robo\Task\DrupalConsole\loadTasks;
     use TaskAccessor;
     use ContainerAwareTrait;
+    use CommandArguments;
 
     /**
      * Set up the Robo container so that we can create tasks in our tests.
@@ -81,7 +83,7 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
           ->configExport()
           ->getCommand();
         $expected = 'drupal config:export --yes'
-          . ' --directory=' . escapeshellarg('sites/default/config') . ' --tar';
+          . ' --tar --directory=' . static::escape('sites/default/config');
         $this->assertEquals($expected, $command);
     }
 
@@ -95,7 +97,7 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
           ->configImport()
           ->getCommand();
         $expected = 'drupal config:import --yes'
-          . ' --directory=' . escapeshellarg('sites/default/config');
+          . ' --directory=' . static::escape('sites/default/config');
         $this->assertEquals($expected, $command);
     }
 
@@ -116,11 +118,16 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
           ->dbFile('sites/default/.ht.sqlite')
           ->siteInstall('minimal')
           ->getCommand();
-        $expected = 'drupal site:install minimal --yes --site-name=' . escapeshellarg('Site Name')
-          . ' --site-mail=site-mail@example.com'
-          . ' --langcode=de --account-mail=mail@example.com --account-name=' . escapeshellarg('admin')
-          . ' --account-pass=pw'
-          . ' --db-prefix=drupal_ --db-type=sqlite --db-file=' . escapeshellarg("sites/default/.ht.sqlite");
+        $expected = 'drupal site:install minimal --yes'
+          . ' --db-file='. static::escape('sites/default/.ht.sqlite')
+          . ' --db-type=' . static::escape('sqlite')
+          . ' --db-prefix=' . static::escape('drupal_')
+          . ' --account-pass=' . static::escape('pw')
+          . ' --account-name=' . static::escape('admin')
+          . ' --account-mail=' . static::escape('mail@example.com')
+          . ' --langcode=' . static::escape('de')
+          . ' --site-mail='. static::escape('site-mail@example.com')
+          . ' --site-name=' . static::escape('Site Name');
         $this->assertEquals($expected, $command);
     }
 
@@ -144,12 +151,19 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
           ->dbPass('testdbpw')
           ->siteInstall('standard')
           ->getCommand();
-        $expected = 'drupal site:install standard --yes --site-name=' . escapeshellarg('Site Name Mysql')
-          . ' --site-mail=site-mail2@example.com --langcode=fr'
-          . ' --account-mail=mail2@example.com --account-name=' . escapeshellarg('admin-user')
-          . ' --account-pass=passw --db-prefix=drupal_ --db-type=mysql'
-          . ' --db-host=' . escapeshellarg('localhost') . ' --db-name=' . escapeshellarg('testdb')
-          . ' --db-user=' . escapeshellarg('dbuser') . ' --db-pass=' . escapeshellarg('testdbpw');
+        $expected = 'drupal site:install standard --yes'
+          . ' --db-pass=' . static::escape('testdbpw')
+          . ' --db-user=' . static::escape('dbuser')
+          . ' --db-name=' . static::escape('testdb')
+          . ' --db-host=' . static::escape('localhost')
+          . ' --db-type=' . static::escape('mysql')
+          . ' --db-prefix=' . static::escape('drupal_')
+          . ' --account-pass=' . static::escape('passw')
+          . ' --account-name=' . static::escape('admin-user')
+          . ' --account-mail=' . static::escape('mail2@example.com')
+          . ' --langcode=' . static::escape('fr')
+          . ' --site-mail=' . static::escape('site-mail2@example.com')
+          . ' --site-name=' . static::escape('Site Name Mysql');
         $this->assertEquals($expected, $command);
     }
 
