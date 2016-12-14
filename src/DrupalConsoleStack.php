@@ -214,16 +214,15 @@ class DrupalConsoleStack extends CommandStack {
   }
 
   /**
-   * Sets the name of directory under 'sites' which should be created. Only
-   * needed when the subdirectory does not already exist. Defaults to 'default'.
+   * Sets the file to use e.g. for database dump/restore.
    *
-   * @param string $sitesSubdir
-   *   The name of the subdirectory.
+   * @param string $file
+   *   The file to use.
    *
    * @return $this
    */
-  public function sitesSubdir($sitesSubdir) {
-    $this->argForNextCommand('--sites-subdir=' . $sitesSubdir);
+  public function file($file) {
+    $this->argForNextCommand('--file=' . $file);
 
     return $this;
   }
