@@ -9,8 +9,10 @@ Extension to execute Drupal Console commands in [Robo](http://robo.li/).
 [![License](https://poser.pugx.org/digipolisgent/robo-drupal-console/license)](https://packagist.org/packages/digipolisgent/robo-drupal-console)
 
 [![Build Status](https://travis-ci.org/digipolisgent/robo-drupal-console.svg?branch=develop)](https://travis-ci.org/digipolisgent/robo-drupal-console)
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/8940f64e-cebe-46de-b670-5a89fb0388a9/mini.png)](https://insight.sensiolabs.com/projects/8940f64e-cebe-46de-b670-5a89fb0388a9)
+[![Code Climate](https://codeclimate.com/github/digipolisgent/robo-drupal-console/badges/gpa.svg)](https://codeclimate.com/github/digipolisgent/robo-drupal-console)
+[![Test Coverage](https://codeclimate.com/github/digipolisgent/robo-drupal-console/badges/coverage.svg)](https://codeclimate.com/github/digipolisgent/robo-drupal-console/coverage)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/digipolisgent/robo-drupal-console/badges/quality-score.png?b=develop)](https://scrutinizer-ci.com/g/digipolisgent/robo-drupal-console/?branch=develop)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/8940f64e-cebe-46de-b670-5a89fb0388a9/mini.png)](https://insight.sensiolabs.com/projects/8940f64e-cebe-46de-b670-5a89fb0388a9)
 [![Dependency Status](https://www.versioneye.com/user/projects/58500a7dfbe933004aa47165/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/58500a7dfbe933004aa47165)
 
 Created based on [Robo DrushStack](https://github.com/boedah/robo-drush). Runs Drupal Console commands in stack. You can define global options for all commands (like Drupal root and uri).
@@ -33,6 +35,7 @@ Add `"digipolisgent/robo-drupal-console": "~0.1"` to your composer.json:
         }
     }
 ```
+
 and execute `composer update`.
 
 OR

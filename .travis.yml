@@ -6,6 +6,11 @@ php:
   - 5.5
 install:
   - composer self-update
-  - composer install
+  - composer install --dev
 script:
-  - vendor/bin/robo test
+  - vendor/bin/robo test:coverage-codeclimate
+addons:
+  code_climate:
+    repo_token: 0e809aae8958c6e4ad800d73c94551aca9c96d969be0942fc5140a720698acdb
+after_success:
+  - vendor/bin/test-reporter

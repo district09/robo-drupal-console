@@ -24,7 +24,7 @@ class RoboFile extends \Robo\Tasks
     /**
      * Provides test coverage for Scrutinizer
      */
-    public function testCoverageScrutinize()
+    public function testCoverageCodeclimate()
     {
         $this->stopOnFail(true);
         $this->taskPHPUnit()
