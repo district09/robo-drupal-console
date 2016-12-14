@@ -536,6 +536,22 @@ class DrupalConsoleStack extends CommandStack {
   }
 
   /**
+   * Drops the database.
+   *
+   * @param array $migrationIds
+   *   The migration ids.
+   *
+   * @return $this
+   */
+  public function executeMigrate($migrationIds) {
+    $migrationIdsString = implode(',', $migrationIds);
+    $this->printTaskInfo("Execute migrations $migrationIdsString");
+    $this->drupal("migrate:execute $migrationIdsString");
+
+    return $this;
+  }
+
+  /**
    * Executes `drupal list`
    *
    * @return $this
