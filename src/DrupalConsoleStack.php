@@ -129,7 +129,7 @@ class DrupalConsoleStack extends CommandStack
      */
     public function drupalRootDirectory($drupalRootDirectory)
     {
-        $this->printTaskInfo('Drupal root: <info>' . $drupalRootDirectory . '</info>');
+        $this->printTaskInfo('Drupal root: <info>{drupalRootDirectory}</info>', ['drupalRootDirectory' => $drupalRootDirectory]);
         $this->option('root', $drupalRootDirectory);
 
         return $this;
@@ -146,7 +146,7 @@ class DrupalConsoleStack extends CommandStack
      */
     public function uri($uri)
     {
-        $this->printTaskInfo('URI: <info>' . $uri . '</info>');
+        $this->printTaskInfo('URI: <info>{uri}</info>', ['uri' => $uri]);
         $this->option('uri', $uri);
 
         return $this;
@@ -162,7 +162,7 @@ class DrupalConsoleStack extends CommandStack
      */
     public function environment($environment = 'prod')
     {
-        $this->printTaskInfo('Environment: <info>' . $environment . '</info>');
+        $this->printTaskInfo('Environment: <info>{environment}</info>', ['environment' => $environment]);
         $this->option('env ', $environment);
 
         return $this;
@@ -175,6 +175,7 @@ class DrupalConsoleStack extends CommandStack
      */
     public function noDebug()
     {
+        $this->printTaskInfo('Debug: <info>off</info>');
         $this->option('no-debug');
 
         return $this;
@@ -190,6 +191,7 @@ class DrupalConsoleStack extends CommandStack
      */
     public function verbose($level = self::VERBOSITY_LEVEL_NORMAL)
     {
+        $this->printTaskInfo('Verbosity: <info>{verbosity}</info>', ['verbosity' => $level]);
         $this->option('verbose', $level);
 
         return $this;
@@ -514,9 +516,10 @@ class DrupalConsoleStack extends CommandStack
     public function maintenance($mode = true)
     {
         $maintenanceMode = $mode ? 'on' : 'off';
-        $this->printTaskInfo('Set maintenance mode ' . $maintenanceMode);
+        $this->printTaskInfo('Set maintenance mode: <info>{maintenanceMode}</info>', ['maintenanceMode' => $maintenanceMode]);
+        $this->drupal('site:maintenance ' . static::escape($maintenanceMode));
 
-        return $this->drupal('site:maintenance ' . static::escape($maintenanceMode));
+        return $this;
     }
 
     /**
@@ -584,7 +587,7 @@ class DrupalConsoleStack extends CommandStack
      */
     public function dbDump($database)
     {
-        $this->printTaskInfo("Dump database $database");
+        $this->printTaskInfo('Dump database: <info>{database}</info>', ['database' => $database]);
         $this->drupal('database:dump ' . static::escape($database));
 
         return $this;
@@ -600,7 +603,7 @@ class DrupalConsoleStack extends CommandStack
      */
     public function dbRestore($database)
     {
-        $this->printTaskInfo('Restore database ' . $database);
+        $this->printTaskInfo('Restore database: <info>{database}</info>', ['database' => $database]);
         $this->drupal('database:restore ' . static::escape($database));
 
         return $this;
@@ -616,7 +619,7 @@ class DrupalConsoleStack extends CommandStack
      */
     public function dbDrop($database)
     {
-        $this->printTaskInfo('Drops database ' . $database);
+        $this->printTaskInfo('Drops database: <info>{database}</info>', ['database' => $database]);
         $this->drupal('database:drop ' . static::escape($database));
 
         return $this;
@@ -633,7 +636,7 @@ class DrupalConsoleStack extends CommandStack
     public function executeMigrate($migrationIds)
     {
         $migrationIdsString = implode(',', $migrationIds);
-        $this->printTaskInfo('Execute migrations ' . $migrationIdsString);
+        $this->printTaskInfo('Execute migrations: <info>{migrationIdsString}</info>', ['migrationIdsString' => $migrationIdsString]);
         $this->drupal('migrate:execute ' . static::escape($migrationIdsString));
 
         return $this;
