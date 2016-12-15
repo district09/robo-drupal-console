@@ -400,5 +400,6 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
     public function testGetVersion() {
         // @todo: fails: DrupalConsole must be executed within a Drupal Site.
         //$this->assertEquals(Drupal\Console\Application::VERSION, $this->taskDrupalConsoleStack(__DIR__ . '/../vendor/bin/drupal')->getVersion());
+        $this->assertEquals('unknown', $this->taskDrupalConsoleStack(__DIR__ . '/../vendor/bin/drupal')->getVersion());
     }
 }

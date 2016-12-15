@@ -463,7 +463,7 @@ class DrupalConsoleStack extends CommandStack
             $result = $this->executeCommand($this->executable . ' --version');
             $output = $result->getMessage();
             $this->drupalConsoleVersion = 'unknown';
-            if (preg_match('#[0-9.]+#', $output, $matches)) {
+            if ($result->wasSuccessful() && preg_match('#[0-9.]+#', $output, $matches)) {
                 $this->drupalConsoleVersion = $matches[0];
             }
             $this->isPrinted = $isPrinted;
