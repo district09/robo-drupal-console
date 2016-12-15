@@ -163,7 +163,7 @@ class DrupalConsoleStack extends CommandStack
     public function environment($environment = 'prod')
     {
         $this->printTaskInfo('Environment: <info>{environment}</info>', ['environment' => $environment]);
-        $this->option('env ', $environment);
+        $this->option('env', $environment);
 
         return $this;
     }
@@ -462,8 +462,10 @@ class DrupalConsoleStack extends CommandStack
             $this->isPrinted = false;
             $result = $this->executeCommand($this->executable . ' --version');
             $output = $result->getMessage();
+            print_r($output);
             $this->drupalConsoleVersion = 'unknown';
             if (preg_match('#[0-9.]+#', $output, $matches)) {
+                print_r($matches);
                 $this->drupalConsoleVersion = $matches[0];
             }
             $this->isPrinted = $isPrinted;
@@ -500,7 +502,7 @@ class DrupalConsoleStack extends CommandStack
     public function updateDb($module = 'all', $updateN = '')
     {
         $this->printTaskInfo('Perform database updates');
-        $this->drupal('update:execute ' . static::escape($module) . ' ' . static::escape($updateN));
+        $this->drupal('update:execute ' . static::escape($module) . ($updateN ? ' ' . static::escape($updateN) : ''));
 
         return $this;
     }
@@ -548,7 +550,7 @@ class DrupalConsoleStack extends CommandStack
      */
     public function siteInstall($installationProfile = '')
     {
-        return $this->drupal('site:install ' . static::escape($installationProfile));
+        return $this->drupal('site:install' . ($installationProfile ? ' ' . static::escape($installationProfile) : ''));
     }
 
     /**
@@ -633,7 +635,7 @@ class DrupalConsoleStack extends CommandStack
      *
      * @return $this
      */
-    public function executeMigrate($migrationIds)
+    public function executeMigrate(array $migrationIds)
     {
         $migrationIdsString = implode(',', $migrationIds);
         $this->printTaskInfo('Execute migrations: <info>{migrationIdsString}</info>', ['migrationIdsString' => $migrationIdsString]);
@@ -692,9 +694,18 @@ class DrupalConsoleStack extends CommandStack
     {
         $optionsForNextCommand = '';
         foreach ($this->optionsForNextCommand as $option => $value) {
-            $optionsForNextCommand .= ' --' . $option . (is_null($value) ? '' : '=' . static::escape($value));
+            $optionsForNextCommand .= ' --' . $option . (is_null($value) ? '' : ' ' . static::escape($value));
         }
-        $cmd = $command . ($assumeYes ? ' --yes' : '') . $this->arguments . $optionsForNextCommand;
+        $cmd = $command;
+        if (trim($this->arguments)) {
+            $cmd .= $this->arguments;
+        }
+        if (trim($optionsForNextCommand)) {
+            $cmd .= $optionsForNextCommand;
+        }
+        if ($assumeYes) {
+            $cmd .= ' --yes';
+        }
         $this->optionsForNextCommand = [];
 
         return $cmd;

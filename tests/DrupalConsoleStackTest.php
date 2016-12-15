@@ -1,4 +1,5 @@
 <?php
+use DigipolisGent\Robo\Task\DrupalConsole\DrupalConsoleStack;
 use League\Container\ContainerAwareInterface;
 use League\Container\ContainerAwareTrait;
 use Robo\Common\CommandArguments;
@@ -33,7 +34,46 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
     {
         $emptyRobofile = new \Robo\Tasks;
         return $this->getContainer()
-          ->get('collectionBuilder', [$emptyRobofile]);
+            ->get('collectionBuilder', [$emptyRobofile]);
+    }
+
+    /**
+     * Tests a given command.
+     *
+     * @param string $method
+     *   The method to call on DrupalConsoleStack.
+     * @param string $command
+     *   The expected command, without the 'drupal ' prefix and ' --yes' suffix.
+     * @param array $args
+     */
+    protected function doTestCommand($method, $command, array $args = [])
+    {
+        $stack = $this->taskDrupalConsoleStack();
+        call_user_func_array([$stack, $method], $args);
+        $expected = 'drupal ' . $command . ' --yes';
+        $this->assertEquals($expected, $stack->getCommand());
+    }
+
+    /**
+     * Test a given option.
+     *
+     * @param string $method
+     *   The method to call on DrupalConsoleStack.
+     * @param string $option
+     *   The option name.
+     * @param string $value
+     *   The option value.
+     */
+    protected function doTestOption($method, $option, $value = null)
+    {
+        $stack = $this->taskDrupalConsoleStack();
+        call_user_func_array([$stack, $method], [$value]);
+        $expected = 'drupal command --' . $option;
+        if (!is_null($value)) {
+            $expected .= ' ' . static::escape($value);
+        }
+        $stack->drupal('command', false);
+        $this->assertEquals($expected, $stack->getCommand());
     }
 
     /**
@@ -68,8 +108,51 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
           ->drupal('command-1')
           ->drupal('command-2')
           ->getCommand();
-        $this->assertEquals(2,
-          preg_match_all('#--root /var/www/html/app#', $command));
+        $this->assertEquals(2, preg_match_all('#--root /var/www/html/app#', $command));
+    }
+
+    /**
+     * Test the cache rebuild command.
+     */
+    function testCacheRebuildCommand()
+    {
+        $this->doTestCommand('cacheRebuild', 'cache:rebuild ' . static::escape('all'));
+        $this->doTestCommand('cacheRebuild', 'cache:rebuild ' . static::escape('menu'), ['menu']);
+    }
+
+    /**
+     * Test the database update command.
+     */
+    public function testUpdateDbCommand()
+    {
+        $this->doTestCommand('updateDb', 'update:execute ' . static::escape('all'));
+        $this->doTestCommand('updateDb', 'update:execute ' . static::escape('system'), ['system']);
+        $this->doTestCommand('updateDb', 'update:execute ' . static::escape('system') . ' ' . static::escape(7001), ['system', 7001]);
+    }
+
+    /**
+     * Test the site maintenance mode command.
+     */
+    public function testMaintenanceCommand()
+    {
+        $this->doTestCommand('maintenance', 'site:maintenance ' . static::escape('on'), [true]);
+        $this->doTestCommand('maintenance', 'site:maintenance ' . static::escape('off'), [false]);
+    }
+
+    /**
+     * Test the cron command.
+     */
+    public function testExecuteCronCommand()
+    {
+        $this->doTestCommand('executeCron', 'cron:execute ' . static::escape('system'), ['system']);
+    }
+
+    /**
+     * Test the site install command.
+     */
+    function testSiteInstallCommand()
+    {
+        $this->doTestCommand('siteInstall', 'site:install');
     }
 
     /**
@@ -77,14 +160,7 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
      */
     public function testConfigExportCommand()
     {
-        $command = $this->taskDrupalConsoleStack()
-          ->directory('sites/default/config')
-          ->tar()
-          ->configExport()
-          ->getCommand();
-        $expected = 'drupal config:export --yes'
-          . ' --tar --directory=' . static::escape('sites/default/config');
-        $this->assertEquals($expected, $command);
+        $this->doTestCommand('configExport', 'config:export');
     }
 
     /**
@@ -92,94 +168,237 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
      */
     public function testConfigImportCommand()
     {
-        $command = $this->taskDrupalConsoleStack()
-          ->directory('sites/default/config')
-          ->configImport()
-          ->getCommand();
-        $expected = 'drupal config:import --yes'
-          . ' --directory=' . static::escape('sites/default/config');
-        $this->assertEquals($expected, $command);
+        $this->doTestCommand('configImport', 'config:import');
     }
 
     /**
-     * Test the site install command with an SQLite database.
+     * Test the database dump command.
      */
-    public function testSiteInstallSqliteCommand()
+    public function testDbDumpCommand()
     {
-        $command = $this->taskDrupalConsoleStack()
-          ->siteName('Site Name')
-          ->siteMail('site-mail@example.com')
-          ->langcode('de')
-          ->accountMail('mail@example.com')
-          ->accountName('admin')
-          ->accountPass('pw')
-          ->dbPrefix('drupal_')
-          ->dbType('sqlite')
-          ->dbFile('sites/default/.ht.sqlite')
-          ->siteInstall('minimal')
-          ->getCommand();
-        $expected = 'drupal site:install minimal --yes'
-          . ' --db-file='. static::escape('sites/default/.ht.sqlite')
-          . ' --db-type=' . static::escape('sqlite')
-          . ' --db-prefix=' . static::escape('drupal_')
-          . ' --account-pass=' . static::escape('pw')
-          . ' --account-name=' . static::escape('admin')
-          . ' --account-mail=' . static::escape('mail@example.com')
-          . ' --langcode=' . static::escape('de')
-          . ' --site-mail='. static::escape('site-mail@example.com')
-          . ' --site-name=' . static::escape('Site Name');
-        $this->assertEquals($expected, $command);
+        $this->doTestCommand('dbDump', 'database:dump ' . static::escape('mydb'), ['mydb']);
     }
 
     /**
-     * Test the site install command with a MySQL database
+     * Test the database restore command.
      */
-    public function testSiteInstallMysqlCommand()
+    public function testDbRestoreCommand()
     {
-        $command = $this->taskDrupalConsoleStack()
-          ->siteName('Site Name Mysql')
-          ->siteMail('site-mail2@example.com')
-          ->langcode('fr')
-          ->accountMail('mail2@example.com')
-          ->accountName('admin-user')
-          ->accountPass('passw')
-          ->dbPrefix('drupal_')
-          ->dbType('mysql')
-          ->dbHost('localhost')
-          ->dbName('testdb')
-          ->dbUser('dbuser')
-          ->dbPass('testdbpw')
-          ->siteInstall('standard')
-          ->getCommand();
-        $expected = 'drupal site:install standard --yes'
-          . ' --db-pass=' . static::escape('testdbpw')
-          . ' --db-user=' . static::escape('dbuser')
-          . ' --db-name=' . static::escape('testdb')
-          . ' --db-host=' . static::escape('localhost')
-          . ' --db-type=' . static::escape('mysql')
-          . ' --db-prefix=' . static::escape('drupal_')
-          . ' --account-pass=' . static::escape('passw')
-          . ' --account-name=' . static::escape('admin-user')
-          . ' --account-mail=' . static::escape('mail2@example.com')
-          . ' --langcode=' . static::escape('fr')
-          . ' --site-mail=' . static::escape('site-mail2@example.com')
-          . ' --site-name=' . static::escape('Site Name Mysql');
-        $this->assertEquals($expected, $command);
+        $this->doTestCommand('dbRestore', 'database:restore ' . static::escape('mydb'), ['mydb']);
     }
 
     /**
-     * Test the Drupal Console list command.
+     * Test the database drop command.
      */
-    public function testDrupalConsoleList()
+    public function testDbDropCommand()
+    {
+        $this->doTestCommand('dbDrop', 'database:drop ' . static::escape('mydb'), ['mydb']);
+    }
+
+    /**
+     * Test the migrate command.
+     */
+    public function testDbExecuteMigrateCommand()
+    {
+        $ids = [1,2,3];
+        $this->doTestCommand('executeMigrate', 'migrate:execute ' . static::escape(implode(',', $ids)), [$ids]);
+    }
+
+    /**
+     * Test the list command.
+     */
+    function testListCommand()
+    {
+        $this->doTestCommand('listCommands', 'list');
+    }
+
+    /**
+     * Test the site status command.
+     */
+    function testSiteStatusCommand()
+    {
+        $this->doTestCommand('siteStatus', 'site:status');
+    }
+
+    /**
+     * Test the Drupal Console list command outside of a Drupal site.
+     */
+    public function testListCommandOutsideDrupalSite()
     {
         $result = $this->taskDrupalConsoleStack(__DIR__ . '/../vendor/bin/drupal')
           ->printed(false)
           ->listCommands()
           ->run();
-        $this->assertEquals(trim($result->getMessage()),
-          'DrupalConsole must be executed within a Drupal Site.');
-        $this->assertFalse($result->wasSuccessful(),
-          'Exit code was: ' . $result->getExitCode());
+        $this->assertEquals(trim($result->getMessage()), 'DrupalConsole must be executed within a Drupal Site.');
+        $this->assertFalse($result->wasSuccessful(), 'Exit code was: ' . $result->getExitCode());
     }
 
+    /**
+     * Test the root directory option.
+     */
+    public function testDrupalRootDirectoryOption() {
+        $this->doTestOption('drupalRootDirectory', 'root', __DIR__);
+    }
+
+    /**
+     * Test the uri option.
+     */
+    public function testUriOption() {
+        $this->doTestOption('uri', 'uri', 'http://example.com');
+    }
+
+    /**
+     * Test the environment option.
+     */
+    public function testEnvironmentOption() {
+        $this->doTestOption('environment', 'env', 'prod');
+    }
+
+    /**
+     * Test the no debug option.
+     */
+    public function testNoDebugOption() {
+        $this->doTestOption('noDebug', 'no-debug');
+    }
+
+    /**
+     * Test the verbose option.
+     */
+    public function testVerboseOption() {
+        $levels = [
+            DrupalConsoleStack::VERBOSITY_LEVEL_NORMAL,
+            DrupalConsoleStack::VERBOSITY_LEVEL_VERBOSE,
+            DrupalConsoleStack::VERBOSITY_LEVEL_DEBUG,
+        ];
+        foreach ($levels as $level) {
+            $this->doTestOption('verbose', 'verbose', $level);
+        }
+    }
+
+    /**
+     * Test the site name option.
+     */
+    public function testSiteNameOption() {
+        $this->doTestOption('siteName', 'site-name', 'Digipolis');
+    }
+
+    /**
+     * Test the site mail option.
+     */
+    public function testSiteMailOption() {
+        $this->doTestOption('siteMail', 'site-mail', 'digipolis@example.com');
+    }
+
+    /**
+     * Test the file option.
+     */
+    public function testFileOption() {
+        $this->doTestOption('file', 'file', __FILE__);
+    }
+
+    /**
+     * Test the directory option.
+     */
+    public function testDirectoryOption() {
+        $this->doTestOption('directory', 'directory', __DIR__);
+    }
+
+    /**
+     * Test the tar option.
+     */
+    public function testTarOption() {
+        $this->doTestOption('tar', 'tar');
+    }
+
+    /**
+     * Test the langcode option.
+     */
+    public function testLangcodeOption() {
+        $this->doTestOption('langcode', 'langcode', 'nl');
+    }
+
+    /**
+     * Test the db type option.
+     */
+    public function testDbTypeOption() {
+        $this->doTestOption('dbType', 'db-type', 'mysql');
+    }
+
+    /**
+     * Test the db file option.
+     */
+    public function testDbFileOption() {
+        $this->doTestOption('dbFile', 'db-file', '.h.sqlite');
+    }
+
+    /**
+     * Test the db file option.
+     */
+    public function testDbHostOption() {
+        $this->doTestOption('dbHost', 'db-host', 'localhost');
+    }
+
+    /**
+     * Test the db name option.
+     */
+    public function testDbNameOption() {
+        $this->doTestOption('dbName', 'db-name', 'db_digipolis');
+    }
+
+    /**
+     * Test the db user option.
+     */
+    public function testDbUserOption() {
+        $this->doTestOption('dbUser', 'db-user', 'db_user');
+    }
+
+    /**
+     * Test the db password option.
+     */
+    public function testDbPassOption() {
+        $this->doTestOption('dbPass', 'db-pass', 'db_pass');
+    }
+
+    /**
+     * Test the db prefix option.
+     */
+    public function testDbPrefixOption() {
+        $this->doTestOption('dbPrefix', 'db-prefix', 'prefix_');
+    }
+
+    /**
+     * Test the db password option.
+     */
+    public function testDbPortOption() {
+        $this->doTestOption('dbPort', 'db-port', '1234');
+    }
+
+    /**
+     * Test the account mail option.
+     */
+    public function testAccountMailOption() {
+        $this->doTestOption('accountMail', 'account-mail', 'account@example.com');
+    }
+
+    /**
+     * Test the account name option.
+     */
+    public function testAccountNameOption() {
+        $this->doTestOption('accountName', 'account-name', 'accountName');
+    }
+
+    /**
+     * Test the account password option.
+     */
+    public function testAccountpassOption() {
+        $this->doTestOption('accountPass', 'account-pass', 'MyPwD123_');
+    }
+
+    /**
+     * Test the getVersion method.
+     */
+    public function testGetVersion() {
+        // @todo: fails: DrupalConsole must be executed within a Drupal Site.
+        //$this->assertEquals(Drupal\Console\Application::VERSION, $this->taskDrupalConsoleStack(__DIR__ . '/../vendor/bin/drupal')->getVersion());
+    }
 }
