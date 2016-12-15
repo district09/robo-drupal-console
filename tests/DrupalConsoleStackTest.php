@@ -332,7 +332,7 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
     }
 
     /**
-     * Test the db file option.
+     * Test the db host option.
      */
     public function testDbHostOption() {
         $this->doTestOption('dbHost', 'db-host', 'localhost');
@@ -367,7 +367,7 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
     }
 
     /**
-     * Test the db password option.
+     * Test the db port option.
      */
     public function testDbPortOption() {
         $this->doTestOption('dbPort', 'db-port', '1234');
@@ -390,7 +390,7 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
     /**
      * Test the account password option.
      */
-    public function testAccountpassOption() {
+    public function testAccountPassOption() {
         $this->doTestOption('accountPass', 'account-pass', 'MyPwD123_');
     }
 

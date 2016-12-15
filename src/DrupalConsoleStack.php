@@ -93,12 +93,12 @@ class DrupalConsoleStack extends CommandStack
      *
      * @param string $name
      *   The name of the option to pass.
-     * @param string $value
+     * @param string|null $value
      *   The value for this option to pass (optional).
      *
      * @return $this
      */
-    protected function optionForNextCommand($name, $value = NULL)
+    protected function optionForNextCommand($name, $value = null)
     {
         return $this->optionsForNextCommand([$name => $value]);
     }
@@ -488,7 +488,7 @@ class DrupalConsoleStack extends CommandStack
     }
 
     /**
-     * Execute a specific Update N function in a module, or execute all.
+     * Execute a specific update N function in a module, or execute all.
      *
      * @param string $module
      *   The module name.
