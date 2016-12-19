@@ -65,10 +65,12 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
      * @param string $value
      *   The option value.
      */
-    protected function doTestOption($method, $option, $value = null)
+    protected function doTestOption($method, $value = null)
     {
         $stack = $this->taskDrupalConsoleStack();
         call_user_func_array([$stack, $method], [$value]);
+        $stack->drupal('command', false);
+        return $stack->getCommand();
         $expected = 'drupal command --' . $option;
         if (!is_null($value)) {
             $expected .= ' ' . static::escape($value);
@@ -290,28 +292,40 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
      * Test the root directory option.
      */
     public function testDrupalRootDirectoryOption() {
-        $this->doTestOption('drupalRootDirectory', 'root', __DIR__);
+        $this->assertEquals(
+          'drupal command --root ' . static::escape(__DIR__),
+          $this->doTestOption('drupalRootDirectory', __DIR__)
+        );
     }
 
     /**
      * Test the uri option.
      */
     public function testUriOption() {
-        $this->doTestOption('uri', 'uri', 'http://example.com');
+        $this->assertEquals(
+          'drupal command --uri ' . static::escape('http://example.com'),
+          $this->doTestOption('uri', 'http://example.com')
+        );
     }
 
     /**
      * Test the environment option.
      */
     public function testEnvironmentOption() {
-        $this->doTestOption('environment', 'env', 'prod');
+        $this->assertEquals(
+          'drupal command --env ' . static::escape('prod'),
+          $this->doTestOption('environment', 'prod')
+        );
     }
 
     /**
      * Test the no debug option.
      */
     public function testNoDebugOption() {
-        $this->doTestOption('noDebug', 'no-debug');
+        $this->assertEquals(
+          'drupal command --no-debug',
+          $this->doTestOption('noDebug')
+        );
     }
 
     /**
@@ -324,7 +338,10 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
             DrupalConsoleStack::VERBOSITY_LEVEL_DEBUG,
         ];
         foreach ($levels as $level) {
-            $this->doTestOption('verbose', 'verbose', $level);
+            $this->assertEquals(
+              'drupal command --verbose ' . static::escape($level),
+              $this->doTestOption('verbose', $level)
+            );
         }
     }
 
@@ -332,104 +349,150 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
      * Test the site name option.
      */
     public function testSiteNameOption() {
-        $this->doTestOption('siteName', 'site-name', 'Digipolis');
+        $this->assertEquals(
+          'drupal command --site-name ' . static::escape('Digipolis'),
+          $this->doTestOption('siteName', 'Digipolis')
+        );
     }
 
     /**
      * Test the site mail option.
      */
     public function testSiteMailOption() {
-        $this->doTestOption('siteMail', 'site-mail', 'digipolis@example.com');
+        $this->assertEquals(
+          'drupal command --site-mail ' . static::escape('digipolis@example.com'),
+          $this->doTestOption('siteMail', 'digipolis@example.com')
+        );
     }
 
     /**
      * Test the file option.
      */
     public function testFileOption() {
-        $this->doTestOption('file', 'file', __FILE__);
+        $this->assertEquals(
+          'drupal command --file ' . static::escape(__FILE__),
+          $this->doTestOption('file', __FILE__)
+        );
     }
 
     /**
      * Test the directory option.
      */
     public function testDirectoryOption() {
-        $this->doTestOption('directory', 'directory', __DIR__);
+        $this->assertEquals(
+          'drupal command --directory ' . static::escape(__DIR__),
+          $this->doTestOption('directory', __DIR__)
+        );
     }
 
     /**
      * Test the tar option.
      */
     public function testTarOption() {
-        $this->doTestOption('tar', 'tar');
+        $this->assertEquals(
+          'drupal command --tar',
+          $this->doTestOption('tar')
+        );
     }
 
     /**
      * Test the langcode option.
      */
     public function testLangcodeOption() {
-        $this->doTestOption('langcode', 'langcode', 'nl');
+        $this->assertEquals(
+          'drupal command --langcode ' . static::escape('nl'),
+          $this->doTestOption('langcode', 'nl')
+        );
     }
 
     /**
      * Test the db type option.
      */
     public function testDbTypeOption() {
-        $this->doTestOption('dbType', 'db-type', 'mysql');
+        $this->assertEquals(
+          'drupal command --db-type ' . static::escape('mysql'),
+          $this->doTestOption('dbType', 'mysql')
+        );
     }
 
     /**
      * Test the db file option.
      */
     public function testDbFileOption() {
-        $this->doTestOption('dbFile', 'db-file', '.h.sqlite');
+        $this->assertEquals(
+          'drupal command --db-file ' . static::escape('.h.sqlite'),
+          $this->doTestOption('dbFile', '.h.sqlite')
+        );
     }
 
     /**
      * Test the db host option.
      */
     public function testDbHostOption() {
-        $this->doTestOption('dbHost', 'db-host', 'localhost');
+        $this->assertEquals(
+          'drupal command --db-host ' . static::escape('localhost'),
+          $this->doTestOption('dbHost', 'localhost')
+        );
     }
 
     /**
      * Test the db name option.
      */
     public function testDbNameOption() {
-        $this->doTestOption('dbName', 'db-name', 'db_digipolis');
+        $this->assertEquals(
+          'drupal command --db-name ' . static::escape('db_digipolis'),
+          $this->doTestOption('dbName', 'db_digipolis')
+        );
     }
 
     /**
      * Test the db user option.
      */
     public function testDbUserOption() {
-        $this->doTestOption('dbUser', 'db-user', 'db_user');
+        $this->assertEquals(
+          'drupal command --db-user ' . static::escape('db_user'),
+          $this->doTestOption('dbUser', 'db_user')
+        );
     }
 
     /**
      * Test the db password option.
      */
     public function testDbPassOption() {
-        $this->doTestOption('dbPass', 'db-pass', 'db_pass');
+        $this->assertEquals(
+          'drupal command --db-pass ' . static::escape('db_pass'),
+          $this->doTestOption('dbPass', 'db_pass')
+        );
     }
 
     /**
      * Test the db prefix option.
      */
     public function testDbPrefixOption() {
-        $this->doTestOption('dbPrefix', 'db-prefix', 'prefix_');
+        $this->assertEquals(
+          'drupal command --db-prefix ' . static::escape('prefix_'),
+          $this->doTestOption('dbPrefix', 'prefix_')
+        );
     }
 
     /**
      * Test the db port option.
      */
     public function testDbPortOption() {
-        $this->doTestOption('dbPort', 'db-port', '1234');
+        $this->assertEquals(
+          'drupal command --db-port ' . static::escape('1234'),
+          $this->doTestOption('dbPort', '1234')
+        );
     }
 
     /**
      * Test the account mail option.
      */
     public function testAccountMailOption() {
+        $this->assertEquals(
+          'drupal command --account-mail ' . static::escape('account@example.com'),
+          $this->doTestOption('accountMail', 'account@example.com')
+        );
         $this->doTestOption('accountMail', 'account-mail', 'account@example.com');
     }
 
@@ -437,6 +500,10 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
      * Test the account name option.
      */
     public function testAccountNameOption() {
+        $this->assertEquals(
+          'drupal command --account-name ' . static::escape('accountName'),
+          $this->doTestOption('accountName', 'accountName')
+        );
         $this->doTestOption('accountName', 'account-name', 'accountName');
     }
 
@@ -444,6 +511,10 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
      * Test the account password option.
      */
     public function testAccountPassOption() {
+        $this->assertEquals(
+          'drupal command --account-pass ' . static::escape('MyPwD123_'),
+          $this->doTestOption('accountPass', 'MyPwD123_')
+        );
         $this->doTestOption('accountPass', 'account-pass', 'MyPwD123_');
     }
 
