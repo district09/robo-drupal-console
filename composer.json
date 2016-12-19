@@ -16,6 +16,11 @@
             "DigipolisGent\\Robo\\Task\\DrupalConsole\\": "src"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "DigipolisGent\\Tests\\Robo\\Task\\DrupalConsole\\": "tests"
+        }
+    },
     "scripts": {
         "test": "robo --ansi test"
     },

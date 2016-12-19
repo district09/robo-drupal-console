@@ -1,4 +1,6 @@
 <?php
+namespace DigipolisGent\Tests\Robo\Task\DrupalConsole;
+
 use DigipolisGent\Robo\Task\DrupalConsole\DrupalConsoleStack;
 use League\Container\ContainerAwareInterface;
 use League\Container\ContainerAwareTrait;
