@@ -5,7 +5,7 @@ Extension to execute Drupal Console commands in [Robo](http://robo.li/).
 [![Latest Stable Version](https://poser.pugx.org/digipolisgent/robo-drupal-console/v/stable)](https://packagist.org/packages/digipolisgent/robo-drupal-console)
 [![Latest Unstable Version](https://poser.pugx.org/digipolisgent/robo-drupal-console/v/unstable)](https://packagist.org/packages/digipolisgent/robo-drupal-console)
 [![Total Downloads](https://poser.pugx.org/digipolisgent/robo-drupal-console/downloads)](https://packagist.org/packages/digipolisgent/robo-drupal-console)
-[![PHP 7 ready](http://php7ready.timesplinter.ch/digipolisgent/robo-drupal-console/master/badge.svg)](https://travis-ci.org/digipolisgent/robo-drupal-console)
+[![PHP 7 ready](http://php7ready.timesplinter.ch/digipolisgent/robo-drupal-console/develop/badge.svg)](https://travis-ci.org/digipolisgent/robo-drupal-console)
 [![License](https://poser.pugx.org/digipolisgent/robo-drupal-console/license)](https://packagist.org/packages/digipolisgent/robo-drupal-console)
 
 [![Build Status](https://travis-ci.org/digipolisgent/robo-drupal-console.svg?branch=develop)](https://travis-ci.org/digipolisgent/robo-drupal-console)
