@@ -34,7 +34,7 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
      */
     public function collectionBuilder()
     {
-        $emptyRobofile = new \Robo\Tasks;
+        $emptyRobofile = new \Robo\Tasks();
         return $this->getContainer()
             ->get('collectionBuilder', [$emptyRobofile]);
     }
