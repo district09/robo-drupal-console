@@ -71,12 +71,6 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
         call_user_func_array([$stack, $method], [$value]);
         $stack->drupal('command', false);
         return $stack->getCommand();
-        $expected = 'drupal command --' . $option;
-        if (!is_null($value)) {
-            $expected .= ' ' . static::escape($value);
-        }
-        $stack->drupal('command', false);
-        $this->assertEquals($expected, $stack->getCommand());
     }
 
     /**
@@ -120,11 +114,11 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
     public function testCacheRebuildCommand()
     {
         $this->assertEquals(
-          'drupal cache:rebuild ' . static::escape('all') . ' --yes',
+          'drupal cache:rebuild all') . ' --yes',
           $this->getTestCommand('cacheRebuild')
         );
         $this->assertEquals(
-          'drupal cache:rebuild ' . static::escape('menu') . ' --yes',
+          'drupal cache:rebuild menu') . ' --yes',
           $this->getTestCommand('cacheRebuild', ['menu'])
         );
     }
@@ -135,15 +129,15 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
     public function testUpdateDbCommand()
     {
         $this->assertEquals(
-          'drupal update:execute ' . static::escape('all') . ' --yes',
+          'drupal update:execute all --yes',
           $this->getTestCommand('updateDb', ['all'])
         );
         $this->assertEquals(
-          'drupal update:execute ' . static::escape('system') . ' --yes',
+          'drupal update:execute system --yes',
           $this->getTestCommand('updateDb', ['system'])
         );
         $this->assertEquals(
-          'drupal update:execute ' . static::escape('system') . ' ' . static::escape(7001) . ' --yes',
+          'drupal update:execute system 7001 --yes',
           $this->getTestCommand('updateDb', ['system', 7001])
         );
     }
@@ -154,11 +148,11 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
     public function testMaintenanceCommand()
     {
         $this->assertEquals(
-          'drupal site:maintenance ' . static::escape('on') . ' --yes',
+          'drupal site:maintenance on') . ' --yes',
           $this->getTestCommand('maintenance', [true])
         );
         $this->assertEquals(
-          'drupal site:maintenance ' . static::escape('off') . ' --yes',
+          'drupal site:maintenance off') . ' --yes',
           $this->getTestCommand('maintenance', [false])
         );
     }
@@ -169,7 +163,7 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
     public function testExecuteCronCommand()
     {
         $this->assertEquals(
-          'drupal cron:execute ' . static::escape('system') . ' --yes',
+          'drupal cron:execute system') . ' --yes',
           $this->getTestCommand('executeCron', ['system'])
         );
     }
@@ -213,7 +207,7 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
     public function testDbDumpCommand()
     {
         $this->assertEquals(
-          'drupal database:dump ' . static::escape('mydb') . ' --yes',
+          'drupal database:dump mydb') . ' --yes',
           $this->getTestCommand('dbDump', ['mydb'])
         );
     }
@@ -224,7 +218,7 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
     public function testDbRestoreCommand()
     {
         $this->assertEquals(
-          'drupal database:restore ' . static::escape('mydb') . ' --yes',
+          'drupal database:restore mydb') . ' --yes',
           $this->getTestCommand('dbRestore', ['mydb'])
         );
     }
@@ -235,7 +229,7 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
     public function testDbDropCommand()
     {
         $this->assertEquals(
-          'drupal database:drop ' . static::escape('mydb') . ' --yes',
+          'drupal database:drop mydb') . ' --yes',
           $this->getTestCommand('dbDrop', ['mydb'])
         );
     }
@@ -247,7 +241,7 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
     {
         $ids = [1,2,3];
         $this->assertEquals(
-          'drupal migrate:execute ' . static::escape(implode(',', $ids)) . ' --yes',
+          'drupal migrate:execute ' . implode(',', $ids) . ' --yes',
           $this->getTestCommand('executeMigrate', [$ids])
         );
     }
@@ -303,7 +297,7 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
      */
     public function testUriOption() {
         $this->assertEquals(
-          'drupal command --uri ' . static::escape('http://example.com'),
+          'drupal command --uri http://example.com'),
           $this->getTestOptionCommand('uri', 'http://example.com')
         );
     }
@@ -313,7 +307,7 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
      */
     public function testEnvironmentOption() {
         $this->assertEquals(
-          'drupal command --env ' . static::escape('prod'),
+          'drupal command --env prod'),
           $this->getTestOptionCommand('environment', 'prod')
         );
     }
@@ -339,7 +333,7 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
         ];
         foreach ($levels as $level) {
             $this->assertEquals(
-              'drupal command --verbose ' . static::escape($level),
+              'drupal command --verbose ' . $level,
               $this->getTestOptionCommand('verbose', $level)
             );
         }
@@ -350,7 +344,7 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
      */
     public function testSiteNameOption() {
         $this->assertEquals(
-          'drupal command --site-name ' . static::escape('Digipolis'),
+          'drupal command --site-name Digipolis'),
           $this->getTestOptionCommand('siteName', 'Digipolis')
         );
     }
@@ -360,7 +354,7 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
      */
     public function testSiteMailOption() {
         $this->assertEquals(
-          'drupal command --site-mail ' . static::escape('digipolis@example.com'),
+          'drupal command --site-mail digipolis@example.com'),
           $this->getTestOptionCommand('siteMail', 'digipolis@example.com')
         );
     }
@@ -400,7 +394,7 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
      */
     public function testLangcodeOption() {
         $this->assertEquals(
-          'drupal command --langcode ' . static::escape('nl'),
+          'drupal command --langcode nl'),
           $this->getTestOptionCommand('langcode', 'nl')
         );
     }
@@ -410,7 +404,7 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
      */
     public function testDbTypeOption() {
         $this->assertEquals(
-          'drupal command --db-type ' . static::escape('mysql'),
+          'drupal command --db-type mysql'),
           $this->getTestOptionCommand('dbType', 'mysql')
         );
     }
@@ -420,7 +414,7 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
      */
     public function testDbFileOption() {
         $this->assertEquals(
-          'drupal command --db-file ' . static::escape('.h.sqlite'),
+          'drupal command --db-file .h.sqlite'),
           $this->getTestOptionCommand('dbFile', '.h.sqlite')
         );
     }
@@ -430,7 +424,7 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
      */
     public function testDbHostOption() {
         $this->assertEquals(
-          'drupal command --db-host ' . static::escape('localhost'),
+          'drupal command --db-host localhost'),
           $this->getTestOptionCommand('dbHost', 'localhost')
         );
     }
@@ -440,7 +434,7 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
      */
     public function testDbNameOption() {
         $this->assertEquals(
-          'drupal command --db-name ' . static::escape('db_digipolis'),
+          'drupal command --db-name db_digipolis'),
           $this->getTestOptionCommand('dbName', 'db_digipolis')
         );
     }
@@ -450,7 +444,7 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
      */
     public function testDbUserOption() {
         $this->assertEquals(
-          'drupal command --db-user ' . static::escape('db_user'),
+          'drupal command --db-user db_user'),
           $this->getTestOptionCommand('dbUser', 'db_user')
         );
     }
@@ -460,7 +454,7 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
      */
     public function testDbPassOption() {
         $this->assertEquals(
-          'drupal command --db-pass ' . static::escape('db_pass'),
+          'drupal command --db-pass db_pass'),
           $this->getTestOptionCommand('dbPass', 'db_pass')
         );
     }
@@ -470,7 +464,7 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
      */
     public function testDbPrefixOption() {
         $this->assertEquals(
-          'drupal command --db-prefix ' . static::escape('prefix_'),
+          'drupal command --db-prefix prefix_'),
           $this->getTestOptionCommand('dbPrefix', 'prefix_')
         );
     }
@@ -480,7 +474,7 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
      */
     public function testDbPortOption() {
         $this->assertEquals(
-          'drupal command --db-port ' . static::escape('1234'),
+          'drupal command --db-port 1234'),
           $this->getTestOptionCommand('dbPort', '1234')
         );
     }
@@ -490,7 +484,7 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
      */
     public function testAccountMailOption() {
         $this->assertEquals(
-          'drupal command --account-mail ' . static::escape('account@example.com'),
+          'drupal command --account-mail account@example.com'),
           $this->getTestOptionCommand('accountMail', 'account@example.com')
         );
         $this->getTestOptionCommand('accountMail', 'account-mail', 'account@example.com');
@@ -501,7 +495,7 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
      */
     public function testAccountNameOption() {
         $this->assertEquals(
-          'drupal command --account-name ' . static::escape('accountName'),
+          'drupal command --account-name accountName'),
           $this->getTestOptionCommand('accountName', 'accountName')
         );
         $this->getTestOptionCommand('accountName', 'account-name', 'accountName');
@@ -512,7 +506,7 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
      */
     public function testAccountPassOption() {
         $this->assertEquals(
-          'drupal command --account-pass ' . static::escape('MyPwD123_'),
+          'drupal command --account-pass MyPwD123_'),
           $this->getTestOptionCommand('accountPass', 'MyPwD123_')
         );
         $this->getTestOptionCommand('accountPass', 'account-pass', 'MyPwD123_');
