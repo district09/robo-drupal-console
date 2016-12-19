@@ -1,4 +1,5 @@
 <?php
+
 namespace DigipolisGent\Tests\Robo\Task\DrupalConsole;
 
 use DigipolisGent\Robo\Task\DrupalConsole\DrupalConsoleStack;

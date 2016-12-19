@@ -1,4 +1,5 @@
 <?php
+
 namespace DigipolisGent\Robo\Task\DrupalConsole;
 
 use Robo\Common\CommandArguments;
