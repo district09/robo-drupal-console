@@ -10,12 +10,33 @@
     "require-dev": {
         "phpunit/phpunit": "~4.4"
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "RC",
+    "autoload": {
+        "psr-4": {
+            "DigipolisGent\\Robo\\Task\\DrupalConsole\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "DigipolisGent\\Tests\\Robo\\Task\\DrupalConsole\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "robo --ansi test"
+    },
     "license": "MIT",
     "authors": [
         {
             "name": "Dieter Blomme",
             "email": "dieterblomme@gmail.com"
+        },
+        {
+            "name": "Jelle Sebreghts",
+            "email": "sebreghts.jelle@gmail.com"
+        },
+        {
+            "name": "Peter Decuyper",
+            "email": "peter.decuyper@digipolis.gent"
         }
     ]
 }
