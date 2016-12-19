@@ -12,7 +12,7 @@ use Symfony\Component\Console\Output\NullOutput;
 class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements ContainerAwareInterface
 {
 
-    use DigipolisGent\Robo\Task\DrupalConsole\loadTasks;
+    use \DigipolisGent\Robo\Task\DrupalConsole\loadTasks;
     use TaskAccessor;
     use ContainerAwareTrait;
     use CommandArguments;
@@ -48,12 +48,11 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
      *   The expected command, without the 'drupal ' prefix and ' --yes' suffix.
      * @param array $args
      */
-    protected function doTestCommand($method, $command, array $args = [])
+    protected function doTestCommand($method, array $args = [])
     {
         $stack = $this->taskDrupalConsoleStack();
         call_user_func_array([$stack, $method], $args);
-        $expected = 'drupal ' . $command . ' --yes';
-        $this->assertEquals($expected, $stack->getCommand());
+        return $stack->getCommand();
     }
 
     /**
@@ -116,10 +115,16 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
     /**
      * Test the cache rebuild command.
      */
-    function testCacheRebuildCommand()
+    public function testCacheRebuildCommand()
     {
-        $this->doTestCommand('cacheRebuild', 'cache:rebuild ' . static::escape('all'));
-        $this->doTestCommand('cacheRebuild', 'cache:rebuild ' . static::escape('menu'), ['menu']);
+        $this->assertEquals(
+          'drupal cache:rebuild ' . static::escape('all') . ' --yes',
+          $this->doTestCommand('cacheRebuild')
+        );
+        $this->assertEquals(
+          'drupal cache:rebuild ' . static::escape('menu') . ' --yes',
+          $this->doTestCommand('cacheRebuild', ['menu'])
+        );
     }
 
     /**
@@ -127,9 +132,18 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
      */
     public function testUpdateDbCommand()
     {
-        $this->doTestCommand('updateDb', 'update:execute ' . static::escape('all'));
-        $this->doTestCommand('updateDb', 'update:execute ' . static::escape('system'), ['system']);
-        $this->doTestCommand('updateDb', 'update:execute ' . static::escape('system') . ' ' . static::escape(7001), ['system', 7001]);
+        $this->assertEquals(
+          'drupal update:execute ' . static::escape('all') . ' --yes',
+          $this->doTestCommand('updateDb', ['all'])
+        );
+        $this->assertEquals(
+          'drupal update:execute ' . static::escape('system') . ' --yes',
+          $this->doTestCommand('updateDb', ['system'])
+        );
+        $this->assertEquals(
+          'drupal update:execute ' . static::escape('system') . ' ' . static::escape(7001) . ' --yes',
+          $this->doTestCommand('updateDb', ['system', 7001])
+        );
     }
 
     /**
@@ -137,8 +151,14 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
      */
     public function testMaintenanceCommand()
     {
-        $this->doTestCommand('maintenance', 'site:maintenance ' . static::escape('on'), [true]);
-        $this->doTestCommand('maintenance', 'site:maintenance ' . static::escape('off'), [false]);
+        $this->assertEquals(
+          'drupal site:maintenance ' . static::escape('on') . ' --yes',
+          $this->doTestCommand('maintenance', [true])
+        );
+        $this->assertEquals(
+          'drupal site:maintenance ' . static::escape('off') . ' --yes',
+          $this->doTestCommand('maintenance', [false])
+        );
     }
 
     /**
@@ -146,15 +166,21 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
      */
     public function testExecuteCronCommand()
     {
-        $this->doTestCommand('executeCron', 'cron:execute ' . static::escape('system'), ['system']);
+        $this->assertEquals(
+          'drupal cron:execute ' . static::escape('system') . ' --yes',
+          $this->doTestCommand('executeCron', ['system'])
+        );
     }
 
     /**
      * Test the site install command.
      */
-    function testSiteInstallCommand()
+    public function testSiteInstallCommand()
     {
-        $this->doTestCommand('siteInstall', 'site:install');
+        $this->assertEquals(
+          'drupal site:install --yes',
+          $this->doTestCommand('siteInstall')
+        );
     }
 
     /**
@@ -162,7 +188,10 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
      */
     public function testConfigExportCommand()
     {
-        $this->doTestCommand('configExport', 'config:export');
+        $this->assertEquals(
+          'drupal config:export --yes',
+          $this->doTestCommand('configExport')
+        );
     }
 
     /**
@@ -170,7 +199,10 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
      */
     public function testConfigImportCommand()
     {
-        $this->doTestCommand('configImport', 'config:import');
+        $this->assertEquals(
+          'drupal config:import --yes',
+          $this->doTestCommand('configImport')
+        );
     }
 
     /**
@@ -178,7 +210,10 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
      */
     public function testDbDumpCommand()
     {
-        $this->doTestCommand('dbDump', 'database:dump ' . static::escape('mydb'), ['mydb']);
+        $this->assertEquals(
+          'drupal database:dump ' . static::escape('mydb') . ' --yes',
+          $this->doTestCommand('dbDump', ['mydb'])
+        );
     }
 
     /**
@@ -186,7 +221,10 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
      */
     public function testDbRestoreCommand()
     {
-        $this->doTestCommand('dbRestore', 'database:restore ' . static::escape('mydb'), ['mydb']);
+        $this->assertEquals(
+          'drupal database:restore ' . static::escape('mydb') . ' --yes',
+          $this->doTestCommand('dbRestore', ['mydb'])
+        );
     }
 
     /**
@@ -194,7 +232,10 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
      */
     public function testDbDropCommand()
     {
-        $this->doTestCommand('dbDrop', 'database:drop ' . static::escape('mydb'), ['mydb']);
+        $this->assertEquals(
+          'drupal database:drop ' . static::escape('mydb') . ' --yes',
+          $this->doTestCommand('dbDrop', ['mydb'])
+        );
     }
 
     /**
@@ -203,23 +244,33 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
     public function testDbExecuteMigrateCommand()
     {
         $ids = [1,2,3];
-        $this->doTestCommand('executeMigrate', 'migrate:execute ' . static::escape(implode(',', $ids)), [$ids]);
+        $this->assertEquals(
+          'drupal migrate:execute ' . static::escape(implode(',', $ids)) . ' --yes',
+          $this->doTestCommand('executeMigrate', [$ids])
+        );
     }
 
     /**
      * Test the list command.
      */
-    function testListCommand()
+    public function testListCommand()
     {
-        $this->doTestCommand('listCommands', 'list');
+        $this->assertEquals(
+          'drupal list --yes',
+          $this->doTestCommand('listCommands')
+        );
+        $this->doTestCommand('listCommands', ['list']);
     }
 
     /**
      * Test the site status command.
      */
-    function testSiteStatusCommand()
+    public function testSiteStatusCommand()
     {
-        $this->doTestCommand('siteStatus', 'site:status');
+        $this->assertEquals(
+          'drupal site:status --yes',
+          $this->doTestCommand('siteStatus')
+        );
     }
 
     /**
