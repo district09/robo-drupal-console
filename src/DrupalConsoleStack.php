@@ -6,9 +6,9 @@ use Robo\Common\CommandArguments;
 use Robo\Task\CommandStack;
 
 /**
- * Runs Drupal Console commands in stack. You can use `stopOnFail()` to point that stack should be terminated on first fail.
- * You can define global options for all commands (like Drupal root and uri).
- * The option --yes is always set, as it makes sense in a task runner.
+ * Runs Drupal Console commands in stack. You can use `stopOnFail()` to point that stack should be terminated on
+ * first fail. You can define global options for all commands (like Drupal root and uri). The option --yes is always
+ * set, as it makes sense in a task runner.
  *
  * ``` php
  * $this->taskDrupalConsoleStack()
@@ -59,7 +59,7 @@ class DrupalConsoleStack extends CommandStack
      *
      * @var array
      */
-    protected $optionsForNextCommand = [];
+    protected $optionsForNextCmd = [];
 
 
     /**
@@ -116,7 +116,7 @@ class DrupalConsoleStack extends CommandStack
      */
     protected function optionsForNextCommand($options)
     {
-        $this->optionsForNextCommand = $options + $this->optionsForNextCommand;
+        $this->optionsForNextCmd = $options + $this->optionsForNextCmd;
 
         return $this;
     }
@@ -474,7 +474,8 @@ class DrupalConsoleStack extends CommandStack
             $result = $this->executeCommand($this->executable.' --version');
             $output = $result->getMessage();
             $this->drupalConsoleVersion = 'unknown';
-            if ($result->wasSuccessful() && preg_match(
+            if ($result->wasSuccessful() &&
+                preg_match(
                     '#[0-9.]+#',
                     $output,
                     $matches
@@ -573,8 +574,8 @@ class DrupalConsoleStack extends CommandStack
     {
         return $this->drupal(
             'site:install'.($installationProfile ? ' '.static::escape(
-                    $installationProfile
-                ) : '')
+                $installationProfile
+            ) : '')
         );
     }
 
@@ -729,25 +730,24 @@ class DrupalConsoleStack extends CommandStack
      */
     protected function injectArguments($command, $assumeYes)
     {
-        $optionsForNextCommand = '';
-        foreach ($this->optionsForNextCommand as $option => $value) {
-            $optionsForNextCommand .= ' --'.$option.(is_null(
-                    $value
-                ) ? '' : ' '.static::escape($value));
+        $optionsForNextCmd = '';
+        foreach ($this->optionsForNextCmd as $option => $value) {
+            $optionsForNextCmd .= ' --'.$option.(
+                is_null($value) ? '' : ' '.static::escape($value)
+            );
         }
         $cmd = $command;
         if (trim($this->arguments)) {
             $cmd .= $this->arguments;
         }
-        if (trim($optionsForNextCommand)) {
-            $cmd .= $optionsForNextCommand;
+        if (trim($optionsForNextCmd)) {
+            $cmd .= $optionsForNextCmd;
         }
         if ($assumeYes) {
             $cmd .= ' --yes';
         }
-        $this->optionsForNextCommand = [];
+        $this->optionsForNextCmd = [];
 
         return $cmd;
     }
-
 }
