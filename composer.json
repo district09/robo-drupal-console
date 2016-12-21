@@ -2,6 +2,8 @@
     "name": "digipolisgent/robo-drupal-console",
     "description": "Drupal Console CommandStack for Robo Task Runner",
     "type": "robo-tasks",
+    "minimum-stability": "RC",
+    "prefer-stable": true,
     "require": {
         "consolidation/robo": "~1.0",
         "drupal/console": "~1.0",
@@ -11,7 +13,6 @@
         "phpunit/phpunit": "~4.4",
         "codeclimate/php-test-reporter": "dev-master"
     },
-    "minimum-stability": "RC",
     "autoload": {
         "psr-4": {
             "DigipolisGent\\Robo\\Task\\DrupalConsole\\": "src"
