@@ -36,7 +36,7 @@ and execute `composer update`.
 
 OR
 
-Issue `composer require digipolisgent/robo-drupal-console:~0.1`
+Issue `composer require --dev digipolisgent/robo-drupal-console:~0.1`
 
 ## Usage
 
