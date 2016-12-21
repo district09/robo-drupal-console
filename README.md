@@ -14,8 +14,8 @@ Extension to execute Drupal Console commands in [Robo](http://robo.li/).
 [![Test Coverage](https://codeclimate.com/github/digipolisgent/robo-drupal-console/badges/coverage.svg)](https://codeclimate.com/github/digipolisgent/robo-drupal-console/coverage)
 [![Dependency Status](https://www.versioneye.com/user/projects/585aaebacd6569002cd5bc23/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/585aaebacd6569002cd5bc23)
 
-Created based on [Robo DrushStack](https://github.com/boedah/robo-drush). Runs Drupal Console commands in stack. You
-can define global options for all commands (like Drupal root and uri).
+Created based on [Robo DrushStack](https://github.com/boedah/robo-drush). Runs Drupal Console 
+commands in stack. You can define global options for all commands (like Drupal root and uri).
 
 ## Table of contents
 
