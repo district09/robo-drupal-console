@@ -36,5 +36,4 @@ class RoboFile extends \Robo\Tasks
             ->arg('tests')
             ->run();
     }
-
 }
