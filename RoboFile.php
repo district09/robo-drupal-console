@@ -32,7 +32,7 @@ class RoboFile extends \Robo\Tasks
             ->option('report-useless-tests')
             ->option('strict-coverage')
             ->option('-d error_reporting=-1')
-            ->option('--coverage-clover=coverage.clover')
+            ->option('--coverage-clover=build/logs/clover.xml')
             ->arg('tests')
             ->run();
     }
