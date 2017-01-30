@@ -104,11 +104,11 @@ class DrupalConsoleStack extends CommandStack
      */
     public function option($option, $value = null)
     {
-        if ($option !== null and strpos($option, '-') !== 0) {
+        if (!is_null($option) && strpos($option, '-') !== 0) {
             $option = "--$option";
         }
-        $this->arguments .= null == $option ? '' : " " . $option;
-        $this->arguments .= null == $value ? '' : "=" . static::escape($value);
+        $this->arguments .= is_null($option) ? '' : " " . $option;
+        $this->arguments .= is_null($value) ? '' : "=" . static::escape($value);
         return $this;
     }
 
