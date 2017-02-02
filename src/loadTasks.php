@@ -18,5 +18,4 @@ trait loadTasks
     {
         return $this->task(DrupalConsoleStack::class, $pathToDrupalConsole);
     }
-
 }

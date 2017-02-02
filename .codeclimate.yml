@@ -1,0 +1,24 @@
+engines:
+  phpcodesniffer:
+    enabled: true
+    config:
+      standard: "PSR1,PSR2"
+  phpmd:
+    enabled: true
+  duplication:
+    enabled: true
+    config:
+      languages:
+        php:
+  fixme:
+    enabled: true
+  markdownlint:
+    enabled: true
+ratings:
+  paths:
+  - "**.php"
+  - "**.md"
+exclude_paths:
+- "**/vendor/**/*"
+- "**/.idea/**/*"
+- "tests/"

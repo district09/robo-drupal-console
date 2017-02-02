@@ -24,7 +24,7 @@ class RoboFile extends \Robo\Tasks
     /**
      * Provides test coverage for Scrutinizer
      */
-    public function testCoverageScrutinize()
+    public function testCoverageCodeclimate()
     {
         $this->stopOnFail(true);
         $this->taskPHPUnit()
@@ -32,9 +32,8 @@ class RoboFile extends \Robo\Tasks
             ->option('report-useless-tests')
             ->option('strict-coverage')
             ->option('-d error_reporting=-1')
-            ->option('--coverage-clover=coverage.clover')
+            ->option('--coverage-clover=build/logs/clover.xml')
             ->arg('tests')
             ->run();
     }
-
 }
