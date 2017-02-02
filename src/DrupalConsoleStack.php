@@ -44,7 +44,9 @@ use Robo\Task\CommandStack;
 class DrupalConsoleStack extends CommandStack
 {
 
-    use CommandArguments;
+    use CommandArguments {
+        option as optionNoEqualSign;
+    }
 
     /**
      * Verbosity levels:
@@ -87,6 +89,27 @@ class DrupalConsoleStack extends CommandStack
     public function __construct($pathToDrupalConsole = 'drupal')
     {
         $this->executable = $pathToDrupalConsole;
+    }
+
+    /**
+     * Pass option to executable. Options are prefixed with `--` , value can be provided in second parameter.
+     * Option values are automatically escaped.
+     *
+     * @param string $option
+     *   The option name.
+     * @param string $value
+     *   The option value.
+     *
+     * @return $this
+     */
+    public function option($option, $value = null)
+    {
+        if (!is_null($option) && strpos($option, '-') !== 0) {
+            $option = "--$option";
+        }
+        $this->arguments .= is_null($option) ? '' : " " . $option;
+        $this->arguments .= is_null($value) ? '' : "=" . static::escape($value);
+        return $this;
     }
 
     /**
@@ -732,8 +755,8 @@ class DrupalConsoleStack extends CommandStack
     {
         $optionsForNextCmd = '';
         foreach ($this->optionsForNextCmd as $option => $value) {
-            $optionsForNextCmd .= ' --'.$option.(
-                is_null($value) ? '' : ' '.static::escape($value)
+            $optionsForNextCmd .= ' --' . $option . (
+                is_null($value) ? '' : '=' . static::escape($value)
             );
         }
         $cmd = $command;
