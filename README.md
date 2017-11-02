@@ -9,7 +9,6 @@ Extension to execute Drupal Console commands in [Robo](http://robo.li/).
 [![License](https://poser.pugx.org/digipolisgent/robo-drupal-console/license)](https://packagist.org/packages/digipolisgent/robo-drupal-console)
 
 [![Build Status](https://travis-ci.org/digipolisgent/robo-drupal-console.svg?branch=develop)](https://travis-ci.org/digipolisgent/robo-drupal-console)
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/8940f64e-cebe-46de-b670-5a89fb0388a9/mini.png)](https://insight.sensiolabs.com/projects/8940f64e-cebe-46de-b670-5a89fb0388a9)
 [![Code Climate](https://codeclimate.com/github/digipolisgent/robo-drupal-console/badges/gpa.svg)](https://codeclimate.com/github/digipolisgent/robo-drupal-console)
 [![Test Coverage](https://codeclimate.com/github/digipolisgent/robo-drupal-console/badges/coverage.svg)](https://codeclimate.com/github/digipolisgent/robo-drupal-console/coverage)
 
