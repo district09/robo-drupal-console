@@ -10,7 +10,7 @@ Extension to execute Drupal Console commands in [Robo](http://robo.li/).
 [![Build Status](https://travis-ci.org/digipolisgent/robo-drupal-console.svg?branch=develop)](https://travis-ci.org/digipolisgent/robo-drupal-console)
 [![Maintainability](https://api.codeclimate.com/v1/badges/48b91548eb03ababa9f8/maintainability)](https://codeclimate.com/github/digipolisgent/robo-drupal-console/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/48b91548eb03ababa9f8/test_coverage)](https://codeclimate.com/github/digipolisgent/robo-drupal-console/test_coverage)
-[![PHP 7 ready](http://php7ready.timesplinter.ch/digipolisgent/robo-drupal-console/develop/badge.svg)](https://travis-ci.org/digipolisgent/robo-drupal-console)
+[![PHP 7 ready](https://php7ready.timesplinter.ch/digipolisgent/robo-drupal-console/develop/badge.svg)](https://travis-ci.org/digipolisgent/robo-drupal-console)
 
 Created based on [Robo DrushStack](https://github.com/boedah/robo-drush). Runs
 Drupal Console commands in stack. You can define global options for all
