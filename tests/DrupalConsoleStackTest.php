@@ -285,8 +285,8 @@ class DrupalConsoleStackTest extends \PHPUnit_Framework_TestCase implements Cont
             ->listCommands()
             ->run();
         $this->assertEquals(
-            trim($result->getMessage()),
-            '[ERROR] DrupalConsole must be executed within a Drupal Site.'
+            'DrupalConsole must be executed within a Drupal Site.',
+            trim($result->getMessage())
         );
         $this->assertFalse(
             $result->wasSuccessful(),
